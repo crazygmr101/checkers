@@ -69,7 +69,7 @@ public class Board {
 				Move m = (Move)itr.next();
 				if (m.getJump()==false) itr.remove();
 			}
-        }
+		}
 		return allMoves;
 	}
 
@@ -83,7 +83,7 @@ public class Board {
 			// white up, black down
 			if (piece == CheckersConstants.WCHEC) k = 1;
 			else if (piece == CheckersConstants.BCHEC) k = -1;
-			
+
 			for (int i=0;i<2;i++) { // always 2 possible moves for each checker
 				int j;
 				if (i == 0) j = 1;
@@ -140,10 +140,10 @@ public class Board {
 				// try all directions
 				int j=0, k=0;
 				switch(i) {
-					case 0: j=1; k=1; break;
-					case 1: j=1; k=-1; break;
-					case 2: j=-1; k=1; break;
-					case 3: j=-1; k=-1; break;
+				case 0: j=1; k=1; break;
+				case 1: j=1; k=-1; break;
+				case 2: j=-1; k=1; break;
+				case 3: j=-1; k=-1; break;
 				}
 
 				// get the position moving to
@@ -186,7 +186,7 @@ public class Board {
 		}  // end of king checker moves
 		return oneCheckerMoves;
 	}
-	
+
 	public void make_move(Move m) {
 		do {
 			int fx=m.getFromX();
@@ -207,14 +207,14 @@ public class Board {
 			// change to king
 			if (piece == CheckersConstants.WCHEC && m.getMadeKing()) piece = CheckersConstants.WKING;
 			if (piece == CheckersConstants.BCHEC && m.getMadeKing()) piece = CheckersConstants.BKING;
-	
+
 			// update the board with moved piece
 			position[tx][ty] = piece;
 			m=m.getNextMove();
-			
+
 		} while (m != null); 
 	}	
-	
+
 	public void unmake_move(Move m) {
 		ArrayList<Move> moveList = new ArrayList<Move>();
 		while (m != null) {
@@ -237,7 +237,7 @@ public class Board {
 
 			// if it was a jump put back the jumped piece
 			if (mm.getJump()) position[fx+k][fy+l] = mm.getJumpedPiece();
-	
+
 			// change back to normal piece if it was a king
 			if (piece == CheckersConstants.WKING && mm.getMadeKing()) piece = CheckersConstants.WCHEC;
 			if (piece == CheckersConstants.BKING && mm.getMadeKing()) piece = CheckersConstants.BCHEC;
@@ -252,27 +252,27 @@ public class Board {
 		for (int i=1;i<=8;i++){
 			for (int j=1;j<=8;j++){
 				if (who==CheckersConstants.WHITE && (position[i][j]==CheckersConstants.WCHEC || position[i][j]==CheckersConstants.WKING))
-						count++;
+					count++;
 				if (who==CheckersConstants.BLACK && (position[i][j]==CheckersConstants.BCHEC || position[i][j]==CheckersConstants.BKING))
-						count++;
+					count++;
 			}
 		}
 		return count;
 	}
-	
+
 	public String toString( ) {	
 		String temp = "\t1\t2\t3\t4\t5\t6\t7\t8\n";
 		for (int i=1;i<=8;i++){
 			temp=temp+i+"\t";
 			for (int j=1;j<=8;j++){
-			// display coresponding figures
+				// display coresponding figures
 				switch (position[i][j]){
-					case CheckersConstants.WCHEC: temp=temp+"W\t"; break;
-					case CheckersConstants.WKING: temp=temp+"WK\t"; break;
-					case CheckersConstants.BCHEC: temp=temp+"B\t"; break;
-					case CheckersConstants.BKING: temp=temp+"BK\t"; break;
-					case CheckersConstants.AVAIL: temp=temp+".\t"; break;
-					case CheckersConstants.OUT:   temp=temp+"\t"; break;
+				case CheckersConstants.WCHEC: temp=temp+"W\t"; break;
+				case CheckersConstants.WKING: temp=temp+"WK\t"; break;
+				case CheckersConstants.BCHEC: temp=temp+"B\t"; break;
+				case CheckersConstants.BKING: temp=temp+"BK\t"; break;
+				case CheckersConstants.AVAIL: temp=temp+".\t"; break;
+				case CheckersConstants.OUT:   temp=temp+"\t"; break;
 				}
 			}
 			temp=temp+"\n";
@@ -285,10 +285,27 @@ public class Board {
 		if (data.isEmpty()) return true;
 		else return false;
 	}
-	
-	public int evaluate(int player) { 
-	// player is either CheckersConstants.BLACK or CheckersConstants.WHITE
-	
+
+	/**
+	 * Board scoring
+	 *  - 1 point for each checker on the board (NOT KING, NOT ABOUT TO KING)
+	 *  - 1.5 points for each checker on the board about to king
+	 *  - 2 points for each king
+	 *  - add points for the longest capture chain
+	 * @param player  CheckersConstants.BLACK or CheckersConstants.WHITE
+	 * @return score
+	 */
+	public int evaluate(int player) {
+		// validate player 
+		assert ( player == CheckersConstants.BLACK || player == CheckersConstants.WHITE);
+		
+		int score = 0;
+		
+		if (player == CheckersConstants.BLACK) {
+			
+		} else {
+
+		}
 		return 1;
 	}
 }	

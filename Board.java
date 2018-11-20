@@ -1,4 +1,3 @@
-package checkers;
 import java.util.*;
 public class Board {
 	private char [][] position;

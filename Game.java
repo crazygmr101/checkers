@@ -1,4 +1,3 @@
-package checkers;
 import java.util.*;
 public class Game {
 	private Board b;

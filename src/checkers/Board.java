@@ -288,9 +288,9 @@ public class Board {
 
 	/**
 	 * Board scoring<br>
-	 *  - 1 point for each checker on the board (NOT KING, NOT ABOUT TO KING)<br/>
-	 *  - 1.5 points for each checker on the board about to king<br>
-	 *  - 2 points for each king<br>
+	 *  - 2 point for each checker on the board (NOT KING, NOT ABOUT TO KING)<br/>
+	 *  - 3 points for each checker on the board about to king<br>
+	 *  - 4 points for each king<br>
 	 *  - add points for the longest capture chain<br>
 	 * @param player  CheckersConstants.BLACK or CheckersConstants.WHITE
 	 * @return score
@@ -299,13 +299,8 @@ public class Board {
 		// validate player 
 		assert ( player == CheckersConstants.BLACK || player == CheckersConstants.WHITE);
 		
-		int score = normalCheckerCount(player) + 2 * kingCheckerCount(player);
+		int score = 2 * normalCheckerCount(player) + 4 * kingCheckerCount(player);
 		
-		if (player == CheckersConstants.BLACK) {
-			
-		} else {
-
-		}
 		return score;
 	}
 	

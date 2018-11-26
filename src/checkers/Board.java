@@ -287,11 +287,11 @@ public class Board {
 	}
 
 	/**
-	 * Board scoring
-	 *  - 1 point for each checker on the board (NOT KING, NOT ABOUT TO KING)
-	 *  - 1.5 points for each checker on the board about to king
-	 *  - 2 points for each king
-	 *  - add points for the longest capture chain
+	 * Board scoring<br>
+	 *  - 1 point for each checker on the board (NOT KING, NOT ABOUT TO KING)<br/>
+	 *  - 1.5 points for each checker on the board about to king<br>
+	 *  - 2 points for each king<br>
+	 *  - add points for the longest capture chain<br>
 	 * @param player  CheckersConstants.BLACK or CheckersConstants.WHITE
 	 * @return score
 	 */
@@ -299,7 +299,7 @@ public class Board {
 		// validate player 
 		assert ( player == CheckersConstants.BLACK || player == CheckersConstants.WHITE);
 		
-		int score = 0;
+		int score = normalCheckerCount(player) + 2 * kingCheckerCount(player);
 		
 		if (player == CheckersConstants.BLACK) {
 			
@@ -307,5 +307,41 @@ public class Board {
 
 		}
 		return 1;
+	}
+	
+	/**
+	 * Counts normal checkers on the board
+	 * @param who CheckersConstants.BLACK or CheckersConstants.WHITE
+	 * @return Number of checkers
+	 */
+	public int normalCheckerCount(int who) { // WHITE=-1, CheckersConstants.BLACK=1
+		int count=0;
+		for (int i=1;i<=8;i++){
+			for (int j=1;j<=8;j++){
+				if (who==CheckersConstants.WHITE && (position[i][j]==CheckersConstants.WCHEC))
+					count++;
+				if (who==CheckersConstants.BLACK && (position[i][j]==CheckersConstants.BCHEC))
+					count++;
+			}
+		}
+		return count;
+	}
+	
+	/**
+	 * Counts kings on the board
+	 * @param who CheckersConstants.BLACK or CheckersConstants.WHITE
+	 * @return Number of kings
+	 */
+	public int kingCheckerCount(int who) { // WHITE=-1, CheckersConstants.BLACK=1
+		int count=0;
+		for (int i=1;i<=8;i++){
+			for (int j=1;j<=8;j++){
+				if (who==CheckersConstants.WHITE && (position[i][j]==CheckersConstants.WKING))
+					count++;
+				if (who==CheckersConstants.BLACK && (position[i][j]==CheckersConstants.BKING))
+					count++;
+			}
+		}
+		return count;
 	}
 }	

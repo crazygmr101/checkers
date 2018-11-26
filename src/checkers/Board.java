@@ -64,7 +64,7 @@ public class Board {
 		}
 		// FORCED JUMP LOGIC, IF AT LEAST ONE JUMP AVAILABLE ONLY RETURN JUMP MOVES
 		if (jumpExists) {
-			Iterator itr = allMoves.iterator();
+			Iterator<Move> itr = allMoves.iterator();
 			while (itr.hasNext()) {
 				Move m = (Move)itr.next();
 				if (m.getJump()==false) itr.remove();
@@ -306,7 +306,7 @@ public class Board {
 		} else {
 
 		}
-		return 1;
+		return score;
 	}
 	
 	/**

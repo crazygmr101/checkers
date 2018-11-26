@@ -301,11 +301,6 @@ public class Board {
 		
 		int score = normalCheckerCount(player) + 2 * kingCheckerCount(player);
 		
-		if (player == CheckersConstants.BLACK) {
-			
-		} else {
-
-		}
 		return score;
 	}
 	

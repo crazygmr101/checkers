@@ -4,7 +4,7 @@ public class Game {
 	private Board b;
 	private int BLACKdepth, WHITEdepth;
 	private boolean display=false;
-	
+
 	public Game(Board newBoard, int newBLACKdepth, int newWHITEdepth, boolean newDisplay) {
 		b=newBoard;
 		display=newDisplay;
@@ -29,7 +29,7 @@ public class Game {
 			m = minmax(turn, WHITEdepth, turn);
 		}
 		if (display) System.out.println(m);
-        b.make_move(m);		// make move
+		b.make_move(m);		// make move
 	}
 
 	public Move minmax(int whoseMove, int level, int turn) {
@@ -98,7 +98,7 @@ public class Game {
 				b.unmake_move(m);
 			}
 		}
-		
+
 		if (whoseMove==turn) return best;
 		else return worst;
 	}

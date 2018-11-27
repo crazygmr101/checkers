@@ -295,13 +295,23 @@ public class Board {
 	 * @param player  CheckersConstants.BLACK or CheckersConstants.WHITE
 	 * @return score
 	 */
-	public int evaluate(int player) {
+	public int evaluateForPlayingBlack(int player) {
 		// validate player 
 		assert ( player == CheckersConstants.BLACK || player == CheckersConstants.WHITE);
 		
-		int score = 2 * normalCheckerCount(player) + 4 * kingCheckerCount(player);
+		int score = 2 * normalCheckerCount(player) + 4 * kingCheckerCount(player) + 3 * checkersAboutToKing(player);
 		
-		return score;
+
+		return (player == CheckersConstants.BLACK? score : -score);
+	}
+	
+	public int evaluateForPlayingWhite(int player) {
+		// validate player 
+		assert ( player == CheckersConstants.BLACK || player == CheckersConstants.WHITE);
+		
+		int score = 2 * normalCheckerCount(player) + 4 * kingCheckerCount(player) + 3 * checkersAboutToKing(player);
+		
+		return (player == CheckersConstants.WHITE ? score : -score);
 	}
 	
 	/**
@@ -338,5 +348,20 @@ public class Board {
 			}
 		}
 		return count;
+	}
+	
+	/**
+	 * Counts moves that could lead to a king arising
+	 * from the depths of the checker underworld
+	 * @param who CheckersConstants.BLACK or CheckersConstants.WHITE
+	 * @return Number of about to summon a king from the underworld
+	 */
+	public int checkersAboutToKing(int who) {
+		int count = 0;
+		ArrayList<Move> ar = find_moves(who);
+		for (Move m : ar)
+			if (m.getMadeKing())
+				count++;
+		return 0;
 	}
 }	

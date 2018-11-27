@@ -79,7 +79,7 @@ public class Game {
 			else return Integer.MAX_VALUE;
 		}
 
-		if (level == 0) return b.evaluate(whoseMove);
+		if (level == 0) return turn == CheckersConstants.BLACK ? b.evaluateForPlayingBlack(whoseMove) : b.evaluateForPlayingWhite(whoseMove);
 		else {
 			// get moves for all checkers of player turn
 			possible_moves=b.find_moves(turn);

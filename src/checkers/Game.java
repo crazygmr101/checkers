@@ -1,38 +1,74 @@
 package checkers;
+
 import java.util.*;
+
+/**
+ * This is the basic class that handles the game itself
+ */
 public class Game {
 	private Board b;
 	private int BLACKdepth, WHITEdepth;
 	private boolean display=false;
 
-	public Game(Board newBoard, int newBLACKdepth, int newWHITEdepth, boolean newDisplay) {
-		b=newBoard;
-		display=newDisplay;
-		if (newBLACKdepth>0) BLACKdepth=newBLACKdepth;
+	/**
+	 * Constructor
+	 * @param board
+	 * @param blackDepth
+	 * @param whiteDepth
+	 * @param display //TODO um what (DN)
+	 */
+	public Game(Board board, int blackDepth, int whiteDepth, boolean display) {
+		b=board;
+		display=display;
+		if (blackDepth>0) BLACKdepth=blackDepth;
 		else BLACKdepth=6;
-		if (newWHITEdepth>0) WHITEdepth=newWHITEdepth;
+		if (whiteDepth>0) WHITEdepth=whiteDepth;
 		else WHITEdepth=6;
 	}
-
+	
+	/**
+	 * Computes a move for a player
+	 * @param turn
+	 */
 	public void	comp_move(int turn) {
 		Move m;
 		if (turn == CheckersConstants.BLACK) {
 			if (display) {
 				System.out.println("Black move - thinking");
 			}
-			m = minmax(turn, BLACKdepth, turn);
+			m = bestMove(turn, BLACKdepth, turn);
 		}
 		else {
 			if (display) {
 				System.out.println("White move - thinking");
 			}
-			m = minmax(turn, WHITEdepth, turn);
+			m = bestMove(turn, WHITEdepth, turn);
 		}
 		if (display) System.out.println(m);
 		b.make_move(m);		// make move
 	}
-
+	
+	/**
+	 * Finds the best move for a player
+	 * @param whoseMove
+	 * @param level
+	 * @param turn
+	 * @return best move
+	 * @deprecated Use {@link #bestMove(int,int,int)} instead
+	 */
+	@Deprecated
 	public Move minmax(int whoseMove, int level, int turn) {
+		return bestMove(whoseMove, level, turn);
+	}
+
+	/**
+	 * Finds the best move for a player
+	 * @param whoseMove
+	 * @param level
+	 * @param turn
+	 * @return best move
+	 */
+	public Move bestMove(int whoseMove, int level, int turn) {
 		ArrayList<Move> possible_moves;
 		ArrayList<Integer> scores = new ArrayList<Integer>();
 		Move chosenMove;
@@ -68,7 +104,14 @@ public class Game {
 		}
 		return chosenMove;
 	}
-
+	
+	/**
+	 * Recursive minmax algorithm 
+	 * @param whoseMove
+	 * @param level
+	 * @param turn
+	 * @return
+	 */
 	public int minmaxR(int whoseMove, int level, int turn) {
 		ArrayList<Move> possible_moves;
 		ArrayList<Integer> scores = new ArrayList<Integer>();

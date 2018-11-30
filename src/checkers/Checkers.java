@@ -1,3 +1,8 @@
+/**
+ * Im not even going to bother commenting out this code
+ * IMO, it need so much work that it'll all be recommented
+ * anyways
+ */
 package checkers;
 import java.util.*;
 public class Checkers {

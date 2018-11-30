@@ -1,45 +1,57 @@
 package checkers;
-import java.util.*;
-public class Board {
-	private char [][] position;
 
+import java.util.*;
+
+public class Board {
+
+	private char [][] board;
+
+	/**
+	 * Constructor, does all the initializing
+	 */
 	public Board( ) {
-		position = new char[10][10];
+		board = new char[10][10];
 		// illegal positions outside edges 
 		for (int i=0;i<=9;i++) {
-			position[0][i] = CheckersConstants.OUT;
-			position[9][i] = CheckersConstants.OUT;
-			position[i][0] = CheckersConstants.OUT;
-			position[i][9] = CheckersConstants.OUT;
+			board[0][i] = CheckersConstants.OUT;
+			board[9][i] = CheckersConstants.OUT;
+			board[i][0] = CheckersConstants.OUT;
+			board[i][9] = CheckersConstants.OUT;
 		}
 
 		// illegal positions within board
 		for (int i=1;i<=8;i+=2)
 			for (int j=2;j<=8;j+=2) {
-				position[i][j-1] = CheckersConstants.OUT;
-				position[i+1][j] = CheckersConstants.OUT;
+				board[i][j-1] = CheckersConstants.OUT;
+				board[i+1][j] = CheckersConstants.OUT;
 			}
 
 		// initial checker positions
 		for (int j=2;j<=8;j+=2) {
-			position[1][j]   = CheckersConstants.WCHEC;	// white
-			position[2][j-1] = CheckersConstants.WCHEC;	// white
-			position[3][j]   = CheckersConstants.WCHEC;	// white
-			position[4][j-1] = CheckersConstants.AVAIL;	// legal and empty positons
-			position[5][j]   = CheckersConstants.AVAIL;	// legal and empty postions
-			position[6][j-1] = CheckersConstants.BCHEC;	// black
-			position[7][j]   = CheckersConstants.BCHEC;	// black
-			position[8][j-1] = CheckersConstants.BCHEC;	// black
+			board[1][j]   = CheckersConstants.WCHEC;	// white
+			board[2][j-1] = CheckersConstants.WCHEC;	// white
+			board[3][j]   = CheckersConstants.WCHEC;	// white
+			board[4][j-1] = CheckersConstants.AVAIL;	// legal and empty positons
+			board[5][j]   = CheckersConstants.AVAIL;	// legal and empty postions
+			board[6][j-1] = CheckersConstants.BCHEC;	// black
+			board[7][j]   = CheckersConstants.BCHEC;	// black
+			board[8][j-1] = CheckersConstants.BCHEC;	// black
 		}
 	}
 
+	/**
+	 * 
+	 * @param turn
+	 * @return
+	 */
+	//TODO comments
 	public ArrayList<Move> find_moves(int turn) {
 		ArrayList<Move> allMoves = new ArrayList<Move>();
 		boolean jumpExists=false;
 		if (turn==CheckersConstants.BLACK) {
 			for (int i=1;i<=8;i++){
 				for (int j=1;j<=8;j++){
-					if (position[i][j] == CheckersConstants.BCHEC || position[i][j] == CheckersConstants.BKING) {
+					if (board[i][j] == CheckersConstants.BCHEC || board[i][j] == CheckersConstants.BKING) {
 						ArrayList<Move> oneCheckerMoves = find_moves(i,j);
 						for (Move item: oneCheckerMoves) {
 							if (item.getJump()) jumpExists=true; 
@@ -52,7 +64,7 @@ public class Board {
 		else {
 			for (int i=1;i<=8;i++){
 				for (int j=1;j<=8;j++){
-					if (position[i][j] == CheckersConstants.WCHEC || position[i][j] == CheckersConstants.WKING) {
+					if (board[i][j] == CheckersConstants.WCHEC || board[i][j] == CheckersConstants.WKING) {
 						ArrayList<Move> oneCheckerMoves = find_moves(i,j);
 						for (Move item: oneCheckerMoves){
 							if (item.getJump()) jumpExists=true; 
@@ -62,6 +74,7 @@ public class Board {
 				}
 			}
 		}
+		//TODO Can we turn this off? (DN)
 		// FORCED JUMP LOGIC, IF AT LEAST ONE JUMP AVAILABLE ONLY RETURN JUMP MOVES
 		if (jumpExists) {
 			Iterator<Move> itr = allMoves.iterator();
@@ -72,11 +85,17 @@ public class Board {
 		}
 		return allMoves;
 	}
-
+	
+	/**
+	 * Finds the moves a checker can take
+	 * @param row
+	 * @param col
+	 * @return
+	 */
 	public ArrayList<Move> find_moves(int row, int col) {
 		ArrayList<Move> oneCheckerMoves = new ArrayList<Move>();
 		Move newMove;
-		char piece=position[row][col];
+		char piece=board[row][col];
 		// for single checker moves
 		if (piece == CheckersConstants.WCHEC || piece == CheckersConstants.BCHEC) {
 			int k=0;
@@ -90,7 +109,7 @@ public class Board {
 				else j = -1;
 
 				// get the position moving to
-				char check = position[row+k][col+j];
+				char check = board[row+k][col+j];
 
 				// save non-jump move if space available
 				if (check == CheckersConstants.AVAIL) {
@@ -103,7 +122,7 @@ public class Board {
 				else if ( (piece == CheckersConstants.WCHEC && (check == CheckersConstants.BCHEC || check == CheckersConstants.BKING)) || 
 						(piece == CheckersConstants.BCHEC && (check == CheckersConstants.WCHEC || check == CheckersConstants.WKING)) ) {
 					if (row+2*k>=1 && row+2*k<=8 && col+2*j>=1 && col+2*j<=8 ) {
-						if (position[row+2*k][col+2*j] == CheckersConstants.AVAIL){
+						if (board[row+2*k][col+2*j] == CheckersConstants.AVAIL){
 							boolean newMoveKing=false;
 							if (row+2*k==1 || row+2*k==8) {
 								newMoveKing=true;
@@ -147,7 +166,7 @@ public class Board {
 				}
 
 				// get the position moving to
-				char check = position[row+k][col+j];
+				char check = board[row+k][col+j];
 
 				// save non-jump move if space available
 				if (check == CheckersConstants.AVAIL) {
@@ -158,7 +177,7 @@ public class Board {
 				else if ( (piece == CheckersConstants.WKING && (check == CheckersConstants.BCHEC || check == CheckersConstants.BKING)) || 
 						(piece == CheckersConstants.BKING && (check == CheckersConstants.WCHEC || check == CheckersConstants.WKING)) ) {
 					if ((row+2*k)>=1 && (row+2*k)<=8 && (col+2*j)>=1 && (col+2*j)<=8 ) {
-						if (position[(row+2*k)][(col+2*j)] == CheckersConstants.AVAIL){
+						if (board[(row+2*k)][(col+2*j)] == CheckersConstants.AVAIL){
 							newMove=new Move(row, col, row+2*k, col+2*j, true, false, check, null);
 							make_move(newMove);  
 							ArrayList<Move> jumpMoves = find_moves(row+2*k, col+2*j);
@@ -186,13 +205,17 @@ public class Board {
 		}  // end of king checker moves
 		return oneCheckerMoves;
 	}
-
+	
+	/**
+	 * Make a move
+	 * @param m
+	 */
 	public void make_move(Move m) {
 		do {
 			int fx=m.getFromX();
 			int fy=m.getFromY();
-			char piece = position[fx][fy];
-			position[fx][fy] = CheckersConstants.AVAIL;
+			char piece = board[fx][fy];
+			board[fx][fy] = CheckersConstants.AVAIL;
 
 			int tx=m.getToX();
 			int ty=m.getToY();
@@ -202,19 +225,23 @@ public class Board {
 			if (ty > fy) l = 1; else l = -1;
 
 			// clear the space if it was a jump
-			if (m.getJump()) position[fx+k][fy+l] = CheckersConstants.AVAIL;
+			if (m.getJump()) board[fx+k][fy+l] = CheckersConstants.AVAIL;
 
 			// change to king
 			if (piece == CheckersConstants.WCHEC && m.getMadeKing()) piece = CheckersConstants.WKING;
 			if (piece == CheckersConstants.BCHEC && m.getMadeKing()) piece = CheckersConstants.BKING;
 
 			// update the board with moved piece
-			position[tx][ty] = piece;
+			board[tx][ty] = piece;
 			m=m.getNextMove();
 
 		} while (m != null); 
 	}	
 
+	/**
+	 * Undo a move
+	 * @param m
+	 */
 	public void unmake_move(Move m) {
 		ArrayList<Move> moveList = new ArrayList<Move>();
 		while (m != null) {
@@ -225,8 +252,8 @@ public class Board {
 		for (Move mm : moveList) {
 			int fx=mm.getToX();
 			int fy=mm.getToY();
-			char piece = position[fx][fy];
-			position[fx][fy] = CheckersConstants.AVAIL;
+			char piece = board[fx][fy];
+			board[fx][fy] = CheckersConstants.AVAIL;
 
 			int tx=mm.getFromX();
 			int ty=mm.getFromY();
@@ -236,37 +263,53 @@ public class Board {
 			if (ty > fy) l = 1; else l = -1;
 
 			// if it was a jump put back the jumped piece
-			if (mm.getJump()) position[fx+k][fy+l] = mm.getJumpedPiece();
+			if (mm.getJump()) board[fx+k][fy+l] = mm.getJumpedPiece();
 
 			// change back to normal piece if it was a king
 			if (piece == CheckersConstants.WKING && mm.getMadeKing()) piece = CheckersConstants.WCHEC;
 			if (piece == CheckersConstants.BKING && mm.getMadeKing()) piece = CheckersConstants.BCHEC;
 
 			// update the board with moved piece
-			position[tx][ty] = piece;
+			board[tx][ty] = piece;
 		}
 	}
 
+	/**
+	 * Counts checkers for a player
+	 * @param who
+	 * @return
+	 */
 	public int checkerCount(int who) { // WHITE=-1, CheckersConstants.BLACK=1
 		int count=0;
 		for (int i=1;i<=8;i++){
 			for (int j=1;j<=8;j++){
-				if (who==CheckersConstants.WHITE && (position[i][j]==CheckersConstants.WCHEC || position[i][j]==CheckersConstants.WKING))
+				if (who==CheckersConstants.WHITE && (board[i][j]==CheckersConstants.WCHEC || board[i][j]==CheckersConstants.WKING))
 					count++;
-				if (who==CheckersConstants.BLACK && (position[i][j]==CheckersConstants.BCHEC || position[i][j]==CheckersConstants.BKING))
+				if (who==CheckersConstants.BLACK && (board[i][j]==CheckersConstants.BCHEC || board[i][j]==CheckersConstants.BKING))
 					count++;
 			}
 		}
 		return count;
 	}
 
+	/**
+	 * toString method
+	 * @return 
+	 */
+	//TODO maybe make this a bit better? (DN)
+	//Potential format
+	// 12345678
+	//1w W B .
+	//2 . . . .
+	// ...
+	@Override
 	public String toString( ) {	
 		String temp = "\t1\t2\t3\t4\t5\t6\t7\t8\n";
 		for (int i=1;i<=8;i++){
 			temp=temp+i+"\t";
 			for (int j=1;j<=8;j++){
 				// display coresponding figures
-				switch (position[i][j]){
+				switch (board[i][j]){
 				case CheckersConstants.WCHEC: temp=temp+"W\t"; break;
 				case CheckersConstants.WKING: temp=temp+"WK\t"; break;
 				case CheckersConstants.BCHEC: temp=temp+"B\t"; break;
@@ -279,7 +322,12 @@ public class Board {
 		}
 		return temp;
 	}
-
+	
+	/**
+	 * Checks to see if the game is ended on a player's turn
+	 * @param player
+	 * @return
+	 */
 	public boolean end_game(int player) {
 		ArrayList<Move> data=find_moves(player);
 		if (data.isEmpty()) return true;
@@ -305,6 +353,15 @@ public class Board {
 		return (player == CheckersConstants.BLACK? score : -score);
 	}
 	
+	/**
+	 * Board scoring<br>
+	 *  - 2 point for each checker on the board (NOT KING, NOT ABOUT TO KING)<br/>
+	 *  - 3 points for each checker on the board about to king<br>
+	 *  - 4 points for each king<br>
+	 *  - add points for the longest capture chain<br>
+	 * @param player  CheckersConstants.BLACK or CheckersConstants.WHITE
+	 * @return score
+	 */
 	public int evaluateForPlayingWhite(int player) {
 		// validate player 
 		assert ( player == CheckersConstants.BLACK || player == CheckersConstants.WHITE);
@@ -323,9 +380,9 @@ public class Board {
 		int count=0;
 		for (int i=1;i<=8;i++){
 			for (int j=1;j<=8;j++){
-				if (who==CheckersConstants.WHITE && (position[i][j]==CheckersConstants.WCHEC))
+				if (who==CheckersConstants.WHITE && (board[i][j]==CheckersConstants.WCHEC))
 					count++;
-				if (who==CheckersConstants.BLACK && (position[i][j]==CheckersConstants.BCHEC))
+				if (who==CheckersConstants.BLACK && (board[i][j]==CheckersConstants.BCHEC))
 					count++;
 			}
 		}
@@ -341,9 +398,9 @@ public class Board {
 		int count=0;
 		for (int i=1;i<=8;i++){
 			for (int j=1;j<=8;j++){
-				if (who==CheckersConstants.WHITE && (position[i][j]==CheckersConstants.WKING))
+				if (who==CheckersConstants.WHITE && (board[i][j]==CheckersConstants.WKING))
 					count++;
-				if (who==CheckersConstants.BLACK && (position[i][j]==CheckersConstants.BKING))
+				if (who==CheckersConstants.BLACK && (board[i][j]==CheckersConstants.BKING))
 					count++;
 			}
 		}

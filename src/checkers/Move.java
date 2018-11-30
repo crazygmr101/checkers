@@ -1,6 +1,9 @@
 
 package checkers;
 
+/**
+ * This class represents a move in the game
+ */
 public class Move {
 	private int fx, fy;	// FROM row, FROM column
 	private int tx, ty;	// TO row, TO column
@@ -8,33 +11,72 @@ public class Move {
 	private char jumpedPiece;
 	private Move next;
 
-	public Move(int newFromX, int newFromY, int newToX, int newToY, boolean newJump, boolean newMadeKing, char newJumpedPiece, Move newNextMove) {
-		setFromTo(newFromX, newFromY, newToX, newToY);
-		jump=newJump;
-		madeKing=newMadeKing;
-		setJumpedPiece(newJumpedPiece);
+	/**
+	 * 
+	 * @param fromx
+	 * @param fromY
+	 * @param toX
+	 * @param toY
+	 * @param isJumped
+	 * @param isMadeKing
+	 * @param jumpedPiece
+	 * @param newNextMove
+	 */
+	public Move(int fromx, int fromY, int toX, int toY, boolean isJumped, boolean isMadeKing, char jumpedPiece, Move newNextMove) {
+		setMoveCoords(fromx, fromY, toX, toY);
+		jump=isJumped;
+		madeKing=isMadeKing;
+		setJumpedPiece(jumpedPiece);
 		setNext(newNextMove);
 	}
 	
-	public Move(Move newMove) {		// copy constructor
-		setFromTo(newMove.fx, newMove.fy, newMove.tx, newMove.ty);
-		jump=newMove.jump;
-		madeKing=newMove.madeKing;
-		setJumpedPiece(newMove.jumpedPiece);
-		setNext(newMove.next);
+	/**
+	 * Copy constructor
+	 * @param move
+	 */
+	public Move(Move move) {		// copy constructor
+		setMoveCoords(move.fx, move.fy, move.tx, move.ty);
+		jump=move.jump;
+		madeKing=move.madeKing;
+		setJumpedPiece(move.jumpedPiece);
+		setNext(move.next);
 	}	
-
-	public void setFromTo(int newFromX, int newFromY, int newToX, int newToY) {
-		if (newFromX>=1 && newFromX<=8 && newToX>=1 && newToY<=8) {
-			fx=newFromX;
-			fy=newFromY;
-			tx=newToX;
-			ty=newToY;
-		}
-		else
-			System.err.println("Invalid Move ("+newFromX+","+newFromY+") to("+newToX+","+newToY+")");
+	
+	/**
+	 * 
+	 * @param fromX
+	 * @param fromY
+	 * @param toX
+	 * @param toY
+	 * @deprecated Use {@link #setMoveCoords(int,int,int,int)} instead
+	 */
+	@Deprecated
+	public void setFromTo(int fromX, int fromY, int toX, int toY) {
+		setMoveCoords(fromX, fromY, toX, toY);
 	}
 
+	/**
+	 * Sets the coords for the move
+	 * @param fromX
+	 * @param fromY
+	 * @param toX
+	 * @param toY
+	 */
+	public void setMoveCoords(int fromX, int fromY, int toX, int toY) {
+		if (fromX>=1 && fromX<=8 && toX>=1 && toY<=8) {
+			fx=fromX;
+			fy=fromY;
+			tx=toX;
+			ty=toY;
+		}
+		else
+			System.err.println("Invalid Move ("+fromX+","+fromY+") to("+toX+","+toY+")");
+	}
+
+	/**
+	 * Sets jumped piece
+	 * @param newJumpedPiece
+	 */
 	public void setJumpedPiece(char newJumpedPiece) {
 		if (newJumpedPiece==CheckersConstants.BCHEC || newJumpedPiece==CheckersConstants.BKING || newJumpedPiece==CheckersConstants.WCHEC || newJumpedPiece==CheckersConstants.WKING || newJumpedPiece==CheckersConstants.AVAIL) 
 			jumpedPiece=newJumpedPiece;
@@ -42,6 +84,11 @@ public class Move {
 			System.err.println("Invalid Jumped Piece "+newJumpedPiece);
 	}
 	
+	/**
+	 * Sets next move
+	 * @param newNext
+	 */
+	//TODO is this used in chains?? (DN)
 	public void setNext(Move newNext) {
 		if (newNext==null)
 			next=newNext;
@@ -59,7 +106,15 @@ public class Move {
 	public boolean getMadeKing() { return madeKing; }	
 	public char getJumpedPiece() { return jumpedPiece; }	
 	public Move getNextMove() { return next; }
-
+	
+	/**
+	 * toString for describing each move
+	 */
+	//TODO this needs desperate work
+	//potential format :
+	// (2,4) to (4,5) jump black king
+	// (2,4) to (4,5) make new king
+	// (2,4) to (4,5) jump black king, make new king
 	public String toString(){
 		String temp="fx="+fx+" fy="+fy+" tx="+tx+" ty="+ty+" jump="+jump+" newKing="+madeKing+" jumped="+jumpedPiece;
 		if (next!=null)

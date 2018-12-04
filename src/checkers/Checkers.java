@@ -4,9 +4,13 @@
  * anyways
  */
 package checkers;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+
 public class Checkers {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
+		GameWindow.main(null);
+		GameWindow gwin = GameWindow.frame;
 		int depth=7, totalMoves=150;
 		boolean display=true;
 		Scanner in = new Scanner(System.in);
@@ -24,6 +28,7 @@ public class Checkers {
 				}
 				g.comp_move(CheckersConstants.BLACK);
 				counter++;
+				gwin.board = b;
 				System.out.println(b);	
 		
 				if (b.end_game(CheckersConstants.WHITE)) {
@@ -49,7 +54,7 @@ public class Checkers {
 				} while (!moveChosen);
 				b.make_move(possible.get(n));
 				counter++;
-				System.out.println(b);		
+				//System.out.println(b);		
 			}
 			if (counter==totalMoves) 
 				System.out.print("TieComputer("+b.checkerCount(CheckersConstants.BLACK)+")Human("+b.checkerCount(CheckersConstants.WHITE)+")  "); 
@@ -80,6 +85,7 @@ public class Checkers {
 				} while (!moveChosen);
 				b.make_move(possible.get(n));
 				counter++;
+				gwin.board = b;
 				System.out.println(b);	
 				
 				if (b.end_game(CheckersConstants.WHITE)) {
@@ -88,6 +94,7 @@ public class Checkers {
 				}
 				g.comp_move(CheckersConstants.WHITE);
 				counter++;
+				gwin.board = b;
 				System.out.println(b);	
 			}
 			if (counter==totalMoves) 

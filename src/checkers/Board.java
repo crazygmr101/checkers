@@ -7,6 +7,17 @@ public class Board {
 	private char [][] board;
 
 	/**
+	 * @return the board
+	 */
+	public char[][] getBoard() {
+		char[][] board = new char[8][8];
+		for (int i = 0; i < 8; i++)
+			for (int j = 0; j < 8; j++)
+				board[i][j] = this.board[i+1][j+1];
+		return board;
+	}
+
+	/**
 	 * Constructor, does all the initializing
 	 */
 	public Board( ) {

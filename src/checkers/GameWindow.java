@@ -36,9 +36,9 @@ public class GameWindow extends JFrame {
 	private JPanel movePanel;
 	private JPanel boardPanel;
 	private JLabel lblStatus;
-	private Board board;
+	Board board;
 	boolean cont = true;
-	private static GameWindow frame;
+	static GameWindow frame;
 
 	/**
 	 * Launch the application.
@@ -63,8 +63,15 @@ public class GameWindow extends JFrame {
 				}
 			}
 		});
-		while (frame.cont)
-			frame.repaint();
+		EventQueue.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				while(frame.cont)
+					frame.update();
+			}
+			
+		});
 		
 	}
 

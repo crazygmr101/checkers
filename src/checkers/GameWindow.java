@@ -14,6 +14,9 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,29 +36,88 @@ public class GameWindow extends JFrame {
 	private JPanel movePanel;
 	private JPanel boardPanel;
 	private JLabel lblStatus;
+	private Board board;
+	boolean cont = true;
+	private static GameWindow frame;
 
 	/**
 	 * Launch the application.
+	 * @throws InterruptedException 
+	 * @throws InvocationTargetException 
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
+	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
+		EventQueue.invokeAndWait(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					GameWindow frame = new GameWindow();
+					frame = new GameWindow();
 					setHandlers(frame);
 					colorBoard(frame);
 					setSizes(frame);
 					colorButtons(frame);
 					frame.setVisible(true);
+					frame.board = new Board();
+					frame.update();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
+		while (frame.cont)
+			frame.repaint();
+		
 	}
 
-
+	public void update() {
+		paint();
+	}
+	
+	@Override
+	public void repaint() {
+		paint();
+	}
+	
+	@Override
+	public void repaint(long time, int x, int y, int x1, int x2) {
+		paint();
+	}
+	
+	public void paint() {
+		Canvas[][] cnv_a = new Canvas[8][8];
+		Component[] components = this.boardPanel.getComponents();
+		char[][] ca = board.getBoard();
+		int a = 0;
+		for (int i = 0; i < 8; i++)
+			for (int j = 0; j < 8; j++) {
+				cnv_a[i][j] = (Canvas)components[a++];
+			}
+		for (int i = 0; i < 8; i++)
+			for (int j = 0; j < 8; j++) {
+				if ( (j + i ) % 2 == 0)
+					continue;
+				Graphics g = cnv_a[i][j].getGraphics();
+				Color c;
+				switch ( ca[i][j] ) {
+				case CheckersConstants.BCHEC:
+					c = Color.BLACK;
+					break;
+				case CheckersConstants.BKING:
+					c = Color.BLACK;
+					break;
+				case CheckersConstants.WCHEC:
+					c = Color.RED;
+					break;
+				case CheckersConstants.WKING:
+					c = Color.RED;
+					break;
+				default:
+					c = Color.WHITE;
+				}
+				cnv_a[i][j].setForeground(c);
+				g.setColor(c);
+				g.fillOval(5, 5, cnv_a[i][j].getWidth() - 10,  cnv_a[i][j].getHeight() - 10);
+			}
+	}
 
 	private static void colorButtons(GameWindow frame) {
 		Component[] components = frame.getMovePanel().getComponents();
@@ -84,6 +146,7 @@ public class GameWindow extends JFrame {
 			cnv.addMouseListener(new Handler(frame));
 		for (Component cnv : frame.boardPanel.getComponents())
 			cnv.addMouseListener(new Handler(frame));
+		frame.movePanel.addMouseListener(new Handler(frame));
 	}
 
 	private static void colorBoard(GameWindow frame) {
@@ -394,6 +457,7 @@ public class GameWindow extends JFrame {
 		movePanel.setMinimumSize(new Dimension(250, 10));
 		contentPane.add(movePanel, BorderLayout.EAST);
 		movePanel.setLayout(new GridLayout(10, 1, 0, 0));
+		movePanel.setName("movePnl");
 
 		JButton cnvMove_1 = new JButton("1");
 		cnvMove_1.setName("1");
@@ -448,6 +512,8 @@ class Handler implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		win.getLblStatus().setText(e.getComponent().getName());
+		if (e.getComponent().getName() == "movePnl")
+			win.cont = false;
 	}
 
 	@Override

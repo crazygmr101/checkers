@@ -6,6 +6,7 @@
 package checkers;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -16,14 +17,21 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Component;
 import javax.swing.JButton;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.Dimension;
 
 public class GameWindow extends JFrame {
-
-	private JPanel contentPane;
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7384928133320272861L;
+	public JPanel contentPane;
+	private JPanel movePanel;
+	private JPanel boardPanel;
+	private JLabel lblStatus;
 
 	/**
 	 * Launch the application.
@@ -33,12 +41,54 @@ public class GameWindow extends JFrame {
 			public void run() {
 				try {
 					GameWindow frame = new GameWindow();
+					setHandlers(frame);
+					colorBoard(frame);
+					setSizes(frame);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
+	}
+	
+	private static void setSizes(GameWindow frame) {
+		frame.setSize(1000, 500);
+		for (Component btn : frame.movePanel.getComponents()) {
+			int height = btn.getHeight();
+			if ( btn instanceof JButton )
+				((JButton)btn).setSize(500, height);
+			btn.setPreferredSize(new Dimension(500, height));
+		}
+		frame.pack();
+	}
+	
+	private static void setHandlers(GameWindow frame) {
+		for (Component btn : frame.movePanel.getComponents())
+			btn.addMouseListener(new Handler(frame));
+		for (Component btn : frame.boardPanel.getComponents())
+			btn.addMouseListener(new Handler(frame));
+	}
+	
+	private static void colorBoard(GameWindow frame) {
+		Component[] components = frame.getBoardPanel().getComponents();
+		for (Component cmp : components) {
+			if (! (cmp instanceof JButton))
+				continue;
+			JButton btn = (JButton)cmp;
+			int s = Integer.parseInt(btn.getName());
+			int r = s % 10;
+			int c = (s - r ) / 10;
+			if ((r + c) % 2 == 0) {
+				btn.setBackground(Color.BLACK);
+				btn.setForeground(Color.BLACK);
+				btn.setBorderPainted(false);
+				//btn.setEnabled(false);
+			} else {
+				btn.setBackground(Color.WHITE);
+				btn.setBorderPainted(false);
+			}
+		}
 	}
 
 	/**
@@ -53,26 +103,30 @@ public class GameWindow extends JFrame {
 		setTitle("Checkers");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 872, 379);
+		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblStatus = new JLabel("Checkers Game");
+		lblStatus = new JLabel("Checkers Game");
 		lblStatus.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(lblStatus, BorderLayout.NORTH);
 		
-		JPanel boardPanel = new JPanel();
+		boardPanel = new JPanel();
+		boardPanel.setPreferredSize(new Dimension(500, 500));
 		boardPanel.setSize(new Dimension(500, 500));
 		boardPanel.setMaximumSize(new Dimension(500, 500));
 		contentPane.add(boardPanel, BorderLayout.CENTER);
 		boardPanel.setLayout(new GridLayout(8, 8, 0, 0));
 		
 		JButton btn_00 = new JButton("00");
+		btn_00.setBackground(Color.BLACK);
 		boardPanel.add(btn_00);
 		btn_00.setName("00");
 
 		JButton btn_10 = new JButton("10");
+		btn_10.setBorderPainted(false);
 		boardPanel.add(btn_10);
 		btn_10.setName("10");
 
@@ -324,35 +378,89 @@ public class GameWindow extends JFrame {
 		boardPanel.add(btn_77);
 		btn_77.setName("77");
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setMinimumSize(new Dimension(250, 10));
-		contentPane.add(panel_1, BorderLayout.EAST);
-		panel_1.setLayout(new GridLayout(10, 1, 0, 0));
+		movePanel = new JPanel();
+		movePanel.setMinimumSize(new Dimension(250, 10));
+		contentPane.add(movePanel, BorderLayout.EAST);
+		movePanel.setLayout(new GridLayout(10, 1, 0, 0));
 		
 		JButton btnMove_1 = new JButton("Move 1");
-		panel_1.add(btnMove_1);
+		btnMove_1.setName("1");
+		movePanel.add(btnMove_1);
 		
 		JButton btnMove_2 = new JButton("Move 2");
+		btnMove_2.setName("2");
 		btnMove_2.setActionCommand("Move 2");
-		panel_1.add(btnMove_2);
+		movePanel.add(btnMove_2);
 		
 		JButton btnMove_3 = new JButton("Move 3");
-		panel_1.add(btnMove_3);
+		btnMove_3.setName("3");
+		movePanel.add(btnMove_3);
 		
 		JButton btnMove_4 = new JButton("Move 4");
-		panel_1.add(btnMove_4);
+		btnMove_4.setName("4");
+		movePanel.add(btnMove_4);
 		
 		JButton btnMove_5 = new JButton("Move 5");
-		panel_1.add(btnMove_5);
+		btnMove_5.setName("5");
+		movePanel.add(btnMove_5);
 		
 		JButton btnMove_6 = new JButton("Move 6");
-		panel_1.add(btnMove_6);
+		btnMove_6.setName("6");
+		movePanel.add(btnMove_6);
 		
 		JButton btnMove_7 = new JButton("Move 7");
-		panel_1.add(btnMove_7);
+		btnMove_7.setName("7");
+		movePanel.add(btnMove_7);
 		
 		JButton btnMove_8 = new JButton("Move 8");
-		panel_1.add(btnMove_8);
+		btnMove_8.setName("8");
+		movePanel.add(btnMove_8);
 	}
 
+	public JPanel getMovePanel() {
+		return movePanel;
+	}
+	public JPanel getBoardPanel() {
+		return boardPanel;
+	}
+	public JLabel getLblStatus() {
+		return lblStatus;
+	}
+}
+
+class Handler implements MouseListener {
+	
+	private GameWindow win;
+
+	public Handler(GameWindow win) { this.win = win; }
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		win.getLblStatus().setText(e.getComponent().getName());
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// Do nothing
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// Do nothing
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// Do nothing
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// Do nothing
+		
+	}
+	
 }

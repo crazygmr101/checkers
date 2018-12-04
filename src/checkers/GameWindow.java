@@ -14,8 +14,6 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowStateListener;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JButton;
@@ -39,9 +37,11 @@ public class GameWindow extends JFrame {
 	Board board;
 	boolean cont = true;
 	static GameWindow frame;
+	boolean changed = true;
 
 	/**
 	 * Launch the application.
+	 * @param args 
 	 * @throws InterruptedException 
 	 * @throws InvocationTargetException 
 	 */
@@ -54,15 +54,18 @@ public class GameWindow extends JFrame {
 					setHandlers(frame);
 					colorBoard(frame);
 					setSizes(frame);
-					colorButtons(frame);
 					frame.setVisible(true);
 					frame.board = new Board();
-					frame.update();
+					return;
+					//frame.update();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
+		/**
+		 * Keeps the window updated
+		 */
 		EventQueue.invokeLater(new Runnable() {
 
 			@Override
@@ -70,26 +73,29 @@ public class GameWindow extends JFrame {
 				while(frame.cont)
 					frame.update();
 			}
-			
-		});
-		
-	}
 
+		});
+
+	}
+	
 	public void update() {
 		paint();
 	}
-	
+
 	@Override
 	public void repaint() {
 		paint();
 	}
-	
+
 	@Override
 	public void repaint(long time, int x, int y, int x1, int x2) {
 		paint();
 	}
-	
+
 	public void paint() {
+		if (!changed)
+			return;
+		changed = false;
 		Canvas[][] cnv_a = new Canvas[8][8];
 		Component[] components = this.boardPanel.getComponents();
 		char[][] ca = board.getBoard();
@@ -104,39 +110,38 @@ public class GameWindow extends JFrame {
 					continue;
 				Graphics g = cnv_a[i][j].getGraphics();
 				Color c;
+				Color c2;
 				switch ( ca[i][j] ) {
 				case CheckersConstants.BCHEC:
-					c = Color.BLACK;
+					c = c2 = Color.BLACK;
 					break;
 				case CheckersConstants.BKING:
 					c = Color.BLACK;
+					c2 = Color.DARK_GRAY;
 					break;
 				case CheckersConstants.WCHEC:
-					c = Color.RED;
+					c = c2 = Color.RED;
 					break;
 				case CheckersConstants.WKING:
 					c = Color.RED;
+					c2 = Color.LIGHT_GRAY;
 					break;
 				default:
 					c = Color.WHITE;
+					c2 = Color.WHITE;
 				}
 				cnv_a[i][j].setForeground(c);
 				g.setColor(c);
 				g.fillOval(5, 5, cnv_a[i][j].getWidth() - 10,  cnv_a[i][j].getHeight() - 10);
+				g.setColor(c2);
+				g.fillOval(15, 15, cnv_a[i][j].getWidth() - 30,  cnv_a[i][j].getHeight() - 30);
 			}
 	}
-
-	private static void colorButtons(GameWindow frame) {
-		Component[] components = frame.getMovePanel().getComponents();
-		for (Component cmp : components) {
-			if (! (cmp instanceof Canvas))
-				continue;
-			Canvas cnv = (Canvas)cmp;
-			cnv.getGraphics().drawString(cnv.getName(), 0, 0);
-		}
-
-	}
-
+	
+	/**
+	 * Sets the sizes of the window components
+	 * @param frame
+	 */
 	private static void setSizes(GameWindow frame) {
 		frame.setSize(1000, 500);
 		for (Component cnv : frame.movePanel.getComponents()) {
@@ -148,6 +153,10 @@ public class GameWindow extends JFrame {
 		frame.pack();
 	}
 
+	/**
+	 * Sets the event handlers for the frame
+	 * @param frame
+	 */
 	private static void setHandlers(GameWindow frame) {
 		for (Component cnv : frame.movePanel.getComponents())
 			cnv.addMouseListener(new Handler(frame));
@@ -156,6 +165,10 @@ public class GameWindow extends JFrame {
 		frame.movePanel.addMouseListener(new Handler(frame));
 	}
 
+	/**
+	 * Colors the squares on the board
+	 * @param frame
+	 */
 	private static void colorBoard(GameWindow frame) {
 		Component[] components = frame.boardPanel.getComponents();
 		for (Component cmp : components) {

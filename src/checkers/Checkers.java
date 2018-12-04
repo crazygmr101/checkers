@@ -29,6 +29,7 @@ public class Checkers {
 				g.comp_move(CheckersConstants.BLACK);
 				counter++;
 				gwin.board = b;
+				gwin.changed = true;
 				System.out.println(b);	
 		
 				if (b.end_game(CheckersConstants.WHITE)) {
@@ -86,6 +87,7 @@ public class Checkers {
 				b.make_move(possible.get(n));
 				counter++;
 				gwin.board = b;
+				gwin.changed = true;
 				System.out.println(b);	
 				
 				if (b.end_game(CheckersConstants.WHITE)) {
@@ -95,6 +97,7 @@ public class Checkers {
 				g.comp_move(CheckersConstants.WHITE);
 				counter++;
 				gwin.board = b;
+				gwin.changed = true;
 				System.out.println(b);	
 			}
 			if (counter==totalMoves) 

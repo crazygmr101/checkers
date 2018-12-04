@@ -19,7 +19,7 @@ public class Game {
 	 */
 	public Game(Board board, int blackDepth, int whiteDepth, boolean display) {
 		b=board;
-		display=display;
+		this.display=display;
 		if (blackDepth>0) BLACKdepth=blackDepth;
 		else BLACKdepth=6;
 		if (whiteDepth>0) WHITEdepth=whiteDepth;
@@ -33,18 +33,21 @@ public class Game {
 	public void	comp_move(int turn) {
 		Move m;
 		if (turn == CheckersConstants.BLACK) {
+			GameWindow.frame.getLblStatus().setText("Black thinking");
 			if (display) {
 				System.out.println("Black move - thinking");
 			}
 			m = bestMove(turn, BLACKdepth, turn);
 		}
 		else {
+			GameWindow.frame.getLblStatus().setText("White thinking");
 			if (display) {
 				System.out.println("White move - thinking");
 			}
 			m = bestMove(turn, WHITEdepth, turn);
 		}
 		if (display) System.out.println(m);
+		GameWindow.frame.getLblStatus().setText("");
 		b.make_move(m);		// make move
 	}
 	

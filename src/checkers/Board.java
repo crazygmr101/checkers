@@ -1,9 +1,11 @@
 package checkers;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Board {
+public class Board implements Serializable {
 
+	private static final long serialVersionUID = 3540754479334928544L;
 	private char [][] board;
 
 	/**

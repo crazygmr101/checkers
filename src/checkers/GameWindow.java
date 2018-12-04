@@ -4,26 +4,27 @@
  * may not parse correctly if modified
  */
 package checkers;
-
 import java.awt.BorderLayout;
+import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import java.awt.Component;
-import javax.swing.JButton;
-import java.awt.GridLayout;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.Dimension;
 
 public class GameWindow extends JFrame {
-	
+
 	/**
 	 * 
 	 */
@@ -38,12 +39,14 @@ public class GameWindow extends JFrame {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					GameWindow frame = new GameWindow();
 					setHandlers(frame);
 					colorBoard(frame);
 					setSizes(frame);
+					colorButtons(frame);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -51,42 +54,51 @@ public class GameWindow extends JFrame {
 			}
 		});
 	}
-	
+
+
+
+	private static void colorButtons(GameWindow frame) {
+		Component[] components = frame.getMovePanel().getComponents();
+		for (Component cmp : components) {
+			if (! (cmp instanceof Canvas))
+				continue;
+			Canvas cnv = (Canvas)cmp;
+			cnv.getGraphics().drawString(cnv.getName(), 0, 0);
+		}
+
+	}
+
 	private static void setSizes(GameWindow frame) {
 		frame.setSize(1000, 500);
-		for (Component btn : frame.movePanel.getComponents()) {
-			int height = btn.getHeight();
-			if ( btn instanceof JButton )
-				((JButton)btn).setSize(500, height);
-			btn.setPreferredSize(new Dimension(500, height));
+		for (Component cnv : frame.movePanel.getComponents()) {
+			int height = cnv.getHeight();
+			if ( cnv instanceof Canvas )
+				((Canvas)cnv).setSize(500, height);
+			cnv.setPreferredSize(new Dimension(500, height));
 		}
 		frame.pack();
 	}
-	
+
 	private static void setHandlers(GameWindow frame) {
-		for (Component btn : frame.movePanel.getComponents())
-			btn.addMouseListener(new Handler(frame));
-		for (Component btn : frame.boardPanel.getComponents())
-			btn.addMouseListener(new Handler(frame));
+		for (Component cnv : frame.movePanel.getComponents())
+			cnv.addMouseListener(new Handler(frame));
+		for (Component cnv : frame.boardPanel.getComponents())
+			cnv.addMouseListener(new Handler(frame));
 	}
-	
+
 	private static void colorBoard(GameWindow frame) {
-		Component[] components = frame.getBoardPanel().getComponents();
+		Component[] components = frame.boardPanel.getComponents();
 		for (Component cmp : components) {
-			if (! (cmp instanceof JButton))
+			if (! (cmp instanceof Canvas))
 				continue;
-			JButton btn = (JButton)cmp;
-			int s = Integer.parseInt(btn.getName());
+			Canvas cnv = (Canvas)cmp;
+			int s = Integer.parseInt(cnv.getName());
 			int r = s % 10;
 			int c = (s - r ) / 10;
 			if ((r + c) % 2 == 0) {
-				btn.setBackground(Color.BLACK);
-				btn.setForeground(Color.BLACK);
-				btn.setBorderPainted(false);
-				//btn.setEnabled(false);
+				cnv.setBackground(Color.BLACK);
 			} else {
-				btn.setBackground(Color.WHITE);
-				btn.setBorderPainted(false);
+				cnv.setBackground(Color.WHITE);
 			}
 		}
 	}
@@ -100,6 +112,7 @@ public class GameWindow extends JFrame {
 	 */
 	public GameWindow() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+
 		setTitle("Checkers");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 872, 379);
@@ -108,313 +121,311 @@ public class GameWindow extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
-		
+
 		lblStatus = new JLabel("Checkers Game");
 		lblStatus.setAlignmentX(Component.CENTER_ALIGNMENT);
 		contentPane.add(lblStatus, BorderLayout.NORTH);
-		
+
 		boardPanel = new JPanel();
 		boardPanel.setPreferredSize(new Dimension(500, 500));
 		boardPanel.setSize(new Dimension(500, 500));
 		boardPanel.setMaximumSize(new Dimension(500, 500));
 		contentPane.add(boardPanel, BorderLayout.CENTER);
 		boardPanel.setLayout(new GridLayout(8, 8, 0, 0));
-		
-		JButton btn_00 = new JButton("00");
-		btn_00.setBackground(Color.BLACK);
-		boardPanel.add(btn_00);
-		btn_00.setName("00");
 
-		JButton btn_10 = new JButton("10");
-		btn_10.setBorderPainted(false);
-		boardPanel.add(btn_10);
-		btn_10.setName("10");
+		Canvas cnv_00 = new Canvas();
+		cnv_00.setBackground(Color.BLACK);
+		boardPanel.add(cnv_00);
+		cnv_00.setName("00");
 
-		JButton btn_20 = new JButton("20");
-		boardPanel.add(btn_20);
-		btn_20.setName("20");
+		Canvas cnv_10 = new Canvas();
+		boardPanel.add(cnv_10);
+		cnv_10.setName("10");
 
-		JButton btn_30 = new JButton("30");
-		boardPanel.add(btn_30);
-		btn_30.setName("30");
+		Canvas cnv_20 = new Canvas();
+		boardPanel.add(cnv_20);
+		cnv_20.setName("20");
 
-		JButton btn_40 = new JButton("40");
-		boardPanel.add(btn_40);
-		btn_40.setName("40");
+		Canvas cnv_30 = new Canvas();
+		boardPanel.add(cnv_30);
+		cnv_30.setName("30");
 
-		JButton btn_50 = new JButton("50");
-		boardPanel.add(btn_50);
-		btn_50.setName("50");
+		Canvas cnv_40 = new Canvas();
+		boardPanel.add(cnv_40);
+		cnv_40.setName("40");
 
-		JButton btn_60 = new JButton("60");
-		boardPanel.add(btn_60);
-		btn_60.setName("60");
+		Canvas cnv_50 = new Canvas();
+		boardPanel.add(cnv_50);
+		cnv_50.setName("50");
 
-		JButton btn_70 = new JButton("70");
-		boardPanel.add(btn_70);
-		btn_70.setName("70");
+		Canvas cnv_60 = new Canvas();
+		boardPanel.add(cnv_60);
+		cnv_60.setName("60");
 
-		JButton btn_01 = new JButton("01");
-		boardPanel.add(btn_01);
-		btn_01.setName("01");
+		Canvas cnv_70 = new Canvas();
+		boardPanel.add(cnv_70);
+		cnv_70.setName("70");
 
-		JButton btn_11 = new JButton("11");
-		boardPanel.add(btn_11);
-		btn_11.setName("11");
+		Canvas cnv_01 = new Canvas();
+		boardPanel.add(cnv_01);
+		cnv_01.setName("01");
 
-		JButton btn_21 = new JButton("21");
-		boardPanel.add(btn_21);
-		btn_21.setName("21");
+		Canvas cnv_11 = new Canvas();
+		boardPanel.add(cnv_11);
+		cnv_11.setName("11");
 
-		JButton btn_31 = new JButton("31");
-		boardPanel.add(btn_31);
-		btn_31.setName("31");
+		Canvas cnv_21 = new Canvas();
+		boardPanel.add(cnv_21);
+		cnv_21.setName("21");
 
-		JButton btn_41 = new JButton("41");
-		boardPanel.add(btn_41);
-		btn_41.setName("41");
+		Canvas cnv_31 = new Canvas();
+		boardPanel.add(cnv_31);
+		cnv_31.setName("31");
 
-		JButton btn_51 = new JButton("51");
-		boardPanel.add(btn_51);
-		btn_51.setName("51");
+		Canvas cnv_41 = new Canvas();
+		boardPanel.add(cnv_41);
+		cnv_41.setName("41");
 
-		JButton btn_61 = new JButton("61");
-		boardPanel.add(btn_61);
-		btn_61.setName("61");
+		Canvas cnv_51 = new Canvas();
+		boardPanel.add(cnv_51);
+		cnv_51.setName("51");
 
-		JButton btn_71 = new JButton("71");
-		boardPanel.add(btn_71);
-		btn_71.setName("71");
+		Canvas cnv_61 = new Canvas();
+		boardPanel.add(cnv_61);
+		cnv_61.setName("61");
 
-		JButton btn_02 = new JButton("02");
-		boardPanel.add(btn_02);
-		btn_02.setName("02");
+		Canvas cnv_71 = new Canvas();
+		boardPanel.add(cnv_71);
+		cnv_71.setName("71");
 
-		JButton btn_12 = new JButton("12");
-		boardPanel.add(btn_12);
-		btn_12.setName("12");
+		Canvas cnv_02 = new Canvas();
+		boardPanel.add(cnv_02);
+		cnv_02.setName("02");
 
-		JButton btn_22 = new JButton("22");
-		boardPanel.add(btn_22);
-		btn_22.setName("22");
+		Canvas cnv_12 = new Canvas();
+		boardPanel.add(cnv_12);
+		cnv_12.setName("12");
 
-		JButton btn_32 = new JButton("32");
-		boardPanel.add(btn_32);
-		btn_32.setName("32");
+		Canvas cnv_22 = new Canvas();
+		boardPanel.add(cnv_22);
+		cnv_22.setName("22");
 
-		JButton btn_42 = new JButton("42");
-		boardPanel.add(btn_42);
-		btn_42.setName("42");
+		Canvas cnv_32 = new Canvas();
+		boardPanel.add(cnv_32);
+		cnv_32.setName("32");
 
-		JButton btn_52 = new JButton("52");
-		boardPanel.add(btn_52);
-		btn_52.setName("52");
+		Canvas cnv_42 = new Canvas();
+		boardPanel.add(cnv_42);
+		cnv_42.setName("42");
 
-		JButton btn_62 = new JButton("62");
-		boardPanel.add(btn_62);
-		btn_62.setName("62");
+		Canvas cnv_52 = new Canvas();
+		boardPanel.add(cnv_52);
+		cnv_52.setName("52");
 
-		JButton btn_72 = new JButton("72");
-		boardPanel.add(btn_72);
-		btn_72.setName("72");
+		Canvas cnv_62 = new Canvas();
+		boardPanel.add(cnv_62);
+		cnv_62.setName("62");
 
-		JButton btn_03 = new JButton("03");
-		boardPanel.add(btn_03);
-		btn_03.setName("03");
+		Canvas cnv_72 = new Canvas();
+		boardPanel.add(cnv_72);
+		cnv_72.setName("72");
 
-		JButton btn_13 = new JButton("13");
-		boardPanel.add(btn_13);
-		btn_13.setName("13");
+		Canvas cnv_03 = new Canvas();
+		boardPanel.add(cnv_03);
+		cnv_03.setName("03");
 
-		JButton btn_23 = new JButton("23");
-		boardPanel.add(btn_23);
-		btn_23.setName("23");
+		Canvas cnv_13 = new Canvas();
+		boardPanel.add(cnv_13);
+		cnv_13.setName("13");
 
-		JButton btn_33 = new JButton("33");
-		boardPanel.add(btn_33);
-		btn_33.setName("33");
+		Canvas cnv_23 = new Canvas();
+		boardPanel.add(cnv_23);
+		cnv_23.setName("23");
 
-		JButton btn_43 = new JButton("43");
-		boardPanel.add(btn_43);
-		btn_43.setName("43");
+		Canvas cnv_33 = new Canvas();
+		boardPanel.add(cnv_33);
+		cnv_33.setName("33");
 
-		JButton btn_53 = new JButton("53");
-		boardPanel.add(btn_53);
-		btn_53.setName("53");
+		Canvas cnv_43 = new Canvas();
+		boardPanel.add(cnv_43);
+		cnv_43.setName("43");
 
-		JButton btn_63 = new JButton("63");
-		boardPanel.add(btn_63);
-		btn_63.setName("63");
+		Canvas cnv_53 = new Canvas();
+		boardPanel.add(cnv_53);
+		cnv_53.setName("53");
 
-		JButton btn_73 = new JButton("73");
-		boardPanel.add(btn_73);
-		btn_73.setName("73");
+		Canvas cnv_63 = new Canvas();
+		boardPanel.add(cnv_63);
+		cnv_63.setName("63");
 
-		JButton btn_04 = new JButton("04");
-		boardPanel.add(btn_04);
-		btn_04.setName("04");
+		Canvas cnv_73 = new Canvas();
+		boardPanel.add(cnv_73);
+		cnv_73.setName("73");
 
-		JButton btn_14 = new JButton("14");
-		boardPanel.add(btn_14);
-		btn_14.setName("14");
+		Canvas cnv_04 = new Canvas();
+		boardPanel.add(cnv_04);
+		cnv_04.setName("04");
 
-		JButton btn_24 = new JButton("24");
-		boardPanel.add(btn_24);
-		btn_24.setName("24");
+		Canvas cnv_14 = new Canvas();
+		boardPanel.add(cnv_14);
+		cnv_14.setName("14");
 
-		JButton btn_34 = new JButton("34");
-		boardPanel.add(btn_34);
-		btn_34.setName("34");
+		Canvas cnv_24 = new Canvas();
+		boardPanel.add(cnv_24);
+		cnv_24.setName("24");
 
-		JButton btn_44 = new JButton("44");
-		boardPanel.add(btn_44);
-		btn_44.setName("44");
+		Canvas cnv_34 = new Canvas();
+		boardPanel.add(cnv_34);
+		cnv_34.setName("34");
 
-		JButton btn_54 = new JButton("54");
-		boardPanel.add(btn_54);
-		btn_54.setName("54");
+		Canvas cnv_44 = new Canvas();
+		boardPanel.add(cnv_44);
+		cnv_44.setName("44");
 
-		JButton btn_64 = new JButton("64");
-		boardPanel.add(btn_64);
-		btn_64.setName("64");
+		Canvas cnv_54 = new Canvas();
+		boardPanel.add(cnv_54);
+		cnv_54.setName("54");
 
-		JButton btn_74 = new JButton("74");
-		boardPanel.add(btn_74);
-		btn_74.setName("74");
+		Canvas cnv_64 = new Canvas();
+		boardPanel.add(cnv_64);
+		cnv_64.setName("64");
 
-		JButton btn_05 = new JButton("05");
-		boardPanel.add(btn_05);
-		btn_05.setName("05");
+		Canvas cnv_74 = new Canvas();
+		boardPanel.add(cnv_74);
+		cnv_74.setName("74");
 
-		JButton btn_15 = new JButton("15");
-		boardPanel.add(btn_15);
-		btn_15.setName("15");
+		Canvas cnv_05 = new Canvas();
+		boardPanel.add(cnv_05);
+		cnv_05.setName("05");
 
-		JButton btn_25 = new JButton("25");
-		boardPanel.add(btn_25);
-		btn_25.setName("25");
+		Canvas cnv_15 = new Canvas();
+		boardPanel.add(cnv_15);
+		cnv_15.setName("15");
 
-		JButton btn_35 = new JButton("35");
-		boardPanel.add(btn_35);
-		btn_35.setName("35");
+		Canvas cnv_25 = new Canvas();
+		boardPanel.add(cnv_25);
+		cnv_25.setName("25");
 
-		JButton btn_45 = new JButton("45");
-		boardPanel.add(btn_45);
-		btn_45.setName("45");
+		Canvas cnv_35 = new Canvas();
+		boardPanel.add(cnv_35);
+		cnv_35.setName("35");
 
-		JButton btn_55 = new JButton("55");
-		boardPanel.add(btn_55);
-		btn_55.setName("55");
+		Canvas cnv_45 = new Canvas();
+		boardPanel.add(cnv_45);
+		cnv_45.setName("45");
 
-		JButton btn_65 = new JButton("65");
-		boardPanel.add(btn_65);
-		btn_65.setName("65");
+		Canvas cnv_55 = new Canvas();
+		boardPanel.add(cnv_55);
+		cnv_55.setName("55");
 
-		JButton btn_75 = new JButton("75");
-		boardPanel.add(btn_75);
-		btn_75.setName("75");
+		Canvas cnv_65 = new Canvas();
+		boardPanel.add(cnv_65);
+		cnv_65.setName("65");
 
-		JButton btn_06 = new JButton("06");
-		boardPanel.add(btn_06);
-		btn_06.setName("06");
+		Canvas cnv_75 = new Canvas();
+		boardPanel.add(cnv_75);
+		cnv_75.setName("75");
 
-		JButton btn_16 = new JButton("16");
-		boardPanel.add(btn_16);
-		btn_16.setName("16");
+		Canvas cnv_06 = new Canvas();
+		boardPanel.add(cnv_06);
+		cnv_06.setName("06");
 
-		JButton btn_26 = new JButton("26");
-		boardPanel.add(btn_26);
-		btn_26.setName("26");
+		Canvas cnv_16 = new Canvas();
+		boardPanel.add(cnv_16);
+		cnv_16.setName("16");
 
-		JButton btn_36 = new JButton("36");
-		boardPanel.add(btn_36);
-		btn_36.setName("36");
+		Canvas cnv_26 = new Canvas();
+		boardPanel.add(cnv_26);
+		cnv_26.setName("26");
 
-		JButton btn_46 = new JButton("46");
-		boardPanel.add(btn_46);
-		btn_46.setName("46");
+		Canvas cnv_36 = new Canvas();
+		boardPanel.add(cnv_36);
+		cnv_36.setName("36");
 
-		JButton btn_56 = new JButton("56");
-		boardPanel.add(btn_56);
-		btn_56.setName("56");
+		Canvas cnv_46 = new Canvas();
+		boardPanel.add(cnv_46);
+		cnv_46.setName("46");
 
-		JButton btn_66 = new JButton("66");
-		boardPanel.add(btn_66);
-		btn_66.setName("66");
+		Canvas cnv_56 = new Canvas();
+		boardPanel.add(cnv_56);
+		cnv_56.setName("56");
 
-		JButton btn_76 = new JButton("76");
-		boardPanel.add(btn_76);
-		btn_76.setName("76");
+		Canvas cnv_66 = new Canvas();
+		boardPanel.add(cnv_66);
+		cnv_66.setName("66");
 
-		JButton btn_07 = new JButton("07");
-		boardPanel.add(btn_07);
-		btn_07.setName("07");
+		Canvas cnv_76 = new Canvas();
+		boardPanel.add(cnv_76);
+		cnv_76.setName("76");
 
-		JButton btn_17 = new JButton("17");
-		boardPanel.add(btn_17);
-		btn_17.setName("17");
+		Canvas cnv_07 = new Canvas();
+		boardPanel.add(cnv_07);
+		cnv_07.setName("07");
 
-		JButton btn_27 = new JButton("27");
-		boardPanel.add(btn_27);
-		btn_27.setName("27");
+		Canvas cnv_17 = new Canvas();
+		boardPanel.add(cnv_17);
+		cnv_17.setName("17");
 
-		JButton btn_37 = new JButton("37");
-		boardPanel.add(btn_37);
-		btn_37.setName("37");
+		Canvas cnv_27 = new Canvas();
+		boardPanel.add(cnv_27);
+		cnv_27.setName("27");
 
-		JButton btn_47 = new JButton("47");
-		boardPanel.add(btn_47);
-		btn_47.setName("47");
+		Canvas cnv_37 = new Canvas();
+		boardPanel.add(cnv_37);
+		cnv_37.setName("37");
 
-		JButton btn_57 = new JButton("57");
-		boardPanel.add(btn_57);
-		btn_57.setName("57");
+		Canvas cnv_47 = new Canvas();
+		boardPanel.add(cnv_47);
+		cnv_47.setName("47");
 
-		JButton btn_67 = new JButton("67");
-		boardPanel.add(btn_67);
-		btn_67.setName("67");
+		Canvas cnv_57 = new Canvas();
+		boardPanel.add(cnv_57);
+		cnv_57.setName("57");
 
-		JButton btn_77 = new JButton("77");
-		boardPanel.add(btn_77);
-		btn_77.setName("77");
-		
+		Canvas cnv_67 = new Canvas();
+		boardPanel.add(cnv_67);
+		cnv_67.setName("67");
+
+		Canvas cnv_77 = new Canvas();
+		boardPanel.add(cnv_77);
+		cnv_77.setName("77");
+
 		movePanel = new JPanel();
 		movePanel.setMinimumSize(new Dimension(250, 10));
 		contentPane.add(movePanel, BorderLayout.EAST);
 		movePanel.setLayout(new GridLayout(10, 1, 0, 0));
-		
-		JButton btnMove_1 = new JButton("Move 1");
-		btnMove_1.setName("1");
-		movePanel.add(btnMove_1);
-		
-		JButton btnMove_2 = new JButton("Move 2");
-		btnMove_2.setName("2");
-		btnMove_2.setActionCommand("Move 2");
-		movePanel.add(btnMove_2);
-		
-		JButton btnMove_3 = new JButton("Move 3");
-		btnMove_3.setName("3");
-		movePanel.add(btnMove_3);
-		
-		JButton btnMove_4 = new JButton("Move 4");
-		btnMove_4.setName("4");
-		movePanel.add(btnMove_4);
-		
-		JButton btnMove_5 = new JButton("Move 5");
-		btnMove_5.setName("5");
-		movePanel.add(btnMove_5);
-		
-		JButton btnMove_6 = new JButton("Move 6");
-		btnMove_6.setName("6");
-		movePanel.add(btnMove_6);
-		
-		JButton btnMove_7 = new JButton("Move 7");
-		btnMove_7.setName("7");
-		movePanel.add(btnMove_7);
-		
-		JButton btnMove_8 = new JButton("Move 8");
-		btnMove_8.setName("8");
-		movePanel.add(btnMove_8);
+
+		JButton cnvMove_1 = new JButton("1");
+		cnvMove_1.setName("1");
+		movePanel.add(cnvMove_1);
+
+		JButton cnvMove_2 = new JButton("2");
+		cnvMove_2.setName("2");
+		movePanel.add(cnvMove_2);
+
+		JButton cnvMove_3 = new JButton("3");
+		cnvMove_3.setName("3");
+		movePanel.add(cnvMove_3);
+
+		JButton cnvMove_4 = new JButton("4");
+		cnvMove_4.setName("4");
+		movePanel.add(cnvMove_4);
+
+		JButton cnvMove_5 = new JButton("5");
+		cnvMove_5.setName("5");
+		movePanel.add(cnvMove_5);
+
+		JButton cnvMove_6 = new JButton("6");
+		cnvMove_6.setName("6");
+		movePanel.add(cnvMove_6);
+
+		JButton cnvMove_7 = new JButton("7");
+		cnvMove_7.setName("7");
+		movePanel.add(cnvMove_7);
+
+		JButton cnvMove_8 = new JButton("8");
+		cnvMove_8.setName("8");
+		movePanel.add(cnvMove_8);
 	}
 
 	public JPanel getMovePanel() {
@@ -429,11 +440,11 @@ public class GameWindow extends JFrame {
 }
 
 class Handler implements MouseListener {
-	
+
 	private GameWindow win;
 
 	public Handler(GameWindow win) { this.win = win; }
-	
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		win.getLblStatus().setText(e.getComponent().getName());
@@ -441,26 +452,29 @@ class Handler implements MouseListener {
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// Do nothing
-		
+		if (e.getComponent() instanceof Canvas) {
+			Canvas s = (Canvas) e.getComponent();
+			s.getGraphics().setColor(Color.LIGHT_GRAY);
+			s.getGraphics().drawRect(5, 5, s.getWidth() - 10, s.getHeight() - 10);
+		}
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// Do nothing
-		
+		if (e.getComponent() instanceof Canvas) {
+			Canvas s = (Canvas) e.getComponent();
+			s.getGraphics().setColor(Color.LIGHT_GRAY);
+			s.getGraphics().drawRect(5, 5, s.getWidth() - 10, s.getHeight() - 10);
+		}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// Do nothing
-		
+		win.getLblStatus().setText(e.getComponent().getName());
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// Do nothing
-		
 	}
-	
+
 }

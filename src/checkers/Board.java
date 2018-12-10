@@ -6,7 +6,7 @@ import java.util.*;
 public class Board implements Serializable {
 
 	private static final long serialVersionUID = 3540754479334928544L;
-	private char [][] board;
+	char [][] board;
 
 	/**
 	 * @return the board
@@ -58,6 +58,7 @@ public class Board implements Serializable {
 	 * @return
 	 */
 	//TODO comments
+	@SuppressWarnings("unused")
 	public ArrayList<Move> find_moves(int turn) {
 		ArrayList<Move> allMoves = new ArrayList<Move>();
 		boolean jumpExists=false;
@@ -89,10 +90,10 @@ public class Board implements Serializable {
 		}
 		//TODO Can we turn this off? (DN)
 		// FORCED JUMP LOGIC, IF AT LEAST ONE JUMP AVAILABLE ONLY RETURN JUMP MOVES
-		if (jumpExists) {
+		if (jumpExists && false) {
 			Iterator<Move> itr = allMoves.iterator();
 			while (itr.hasNext()) {
-				Move m = (Move)itr.next();
+				Move m = itr.next();
 				if (m.getJump()==false) itr.remove();
 			}
 		}

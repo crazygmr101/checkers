@@ -149,8 +149,28 @@ public class Move implements Serializable {
 	// (2,4) to (4,5) jump black king, make new king
 	@Override
 	public String toString() {
-		String temp = "fx=" + fx + " fy=" + fy + " tx=" + tx + " ty=" + ty + " jump=" + jump + " newKing=" + madeKing
-				+ " jumped=" + jumpedPiece;
+		String jp = "";
+		if (jump) {
+			switch (jumpedPiece) {
+			case 'w':
+				jp = "white";
+				break;
+			case 'B':
+				jp = "black king";
+				break;
+			case 'W':
+				jp = "white king";
+				break;
+			case 'b':
+				jp = "black";
+				break;
+			default:
+				break;
+			}
+		}
+		String temp = "(" + fx + "," + fy + ") to (" + tx + "," + ty + ")" +
+						(jump ? ", Jumped: " + jp : "") +
+						(madeKing ? ", make new king" : "");
 		if (next != null)
 			temp = temp + " next=[" + next.toString() + "]";
 		return temp;

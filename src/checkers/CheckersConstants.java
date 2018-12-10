@@ -1,5 +1,5 @@
 package checkers;
-public class CheckersConstants {
+public interface CheckersConstants {
 	public static final char BCHEC='b';	// internal black checker
 	public static final char BKING='B';	// internal black king
 	public static final char WCHEC='w';	// internal white checker

@@ -47,7 +47,7 @@ public class Game {
 			m = bestMove(turn, WHITEdepth, turn);
 		}
 		if (display) System.out.println(m);
-		GameWindow.frame.getLblStatus().setText("");
+		GameWindow.frame.getLblStatus().setText(" ");
 		b.make_move(m);		// make move
 	}
 	
@@ -115,6 +115,7 @@ public class Game {
 	 * @param turn
 	 * @return
 	 */
+	@SuppressWarnings("boxing")
 	public int minmaxR(int whoseMove, int level, int turn) {
 		ArrayList<Move> possible_moves;
 		ArrayList<Integer> scores = new ArrayList<Integer>();

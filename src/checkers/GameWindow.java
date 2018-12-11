@@ -44,7 +44,7 @@ public class GameWindow extends JFrame {
 	volatile boolean changed = true;
 	volatile CheckerSquare[][] cs = new CheckerSquare[8][8];
 	volatile int choice = 0;
-	volatile JButton moves[] = new JButton[10];
+	volatile JButton moves[] = new JButton[20];
 	volatile ArrayList<Move> movesList;
 
 	/**
@@ -156,10 +156,12 @@ public class GameWindow extends JFrame {
 			}
 
 		movePanel = new JPanel();
-		movePanel.setMinimumSize(new Dimension(250, 10));
+		movePanel.setMinimumSize(boardPanel.getSize());
+		movePanel.setSize(boardPanel.getSize());
+		movePanel.setPreferredSize(boardPanel.getSize());
 		scrollPanel = new JScrollPane(movePanel);
 		contentPane.add(scrollPanel, BorderLayout.EAST);
-		movePanel.setLayout(new GridLayout(10, 1, 0, 0));
+		movePanel.setLayout(new GridLayout(20, 1, 0, 0));
 		movePanel.setName("movePnl");
 
 		for (int i = 0; i < moves.length; i++) {

@@ -17,17 +17,28 @@ public class Checkers {
 		boolean display=true;
 		System.out.println("Black Moves First");
 		System.out.print("Who goes first, Human or Computer (H or C)? ");
-		Game g = new Game(b, depth, depth, display);
 
 		GameWindow.main(null, b);
 		gwin = GameWindow.frame;
 		gwin.choice = -1;
+		gwin.moves[0].setText("Noobbbb");
+		gwin.moves[1].setText("Easy");
+		gwin.moves[2].setText("Medium");
+		gwin.moves[3].setText("Hard");
+		while (gwin.choice < 0 || gwin.choice > 3) {
+			//do nothing
+		}
+		depth = (new int[] {1,2,4,6})[gwin.choice];
+		gwin.choice = -1;
 		gwin.moves[0].setText("Human first");
 		gwin.moves[1].setText("Computer first");
+		gwin.moves[2].setText("-----");
+		gwin.moves[3].setText("-----");
 		while (gwin.choice != 1 && gwin.choice != 0) {
 			//do nothing
 		}
 		boolean computerFirst = gwin.choice == 1;
+		Game g = new Game(b, depth, depth, display);
 		int counter=0;		
 		if (computerFirst) {  // Computer first (black)
 			System.out.println("Computer is Black");
@@ -94,7 +105,7 @@ public class Checkers {
 	
 	public static int getChoice() {
 		gwin.choice = -1;
-		while(gwin.choice < 0) {
+		while(gwin.choice < 0 || gwin.choice > possible.size()) {
 			//do nothing
 		}
 		for (int i = 0; i < gwin.moves.length; i++)
@@ -106,7 +117,7 @@ public class Checkers {
 		gwin.movesList = new ArrayList<Move>();
 		int i=0;
 		for (Move m : possible) {
-			gwin.moves[i].setText(String.valueOf(i) + ':' + m);
+			gwin.moves[i].setText(String.valueOf(m));
 			gwin.movesList.add(m);
 			System.out.println(i+": "+ m);
 			i++;

@@ -3,6 +3,9 @@ package checkers;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * Class that represents a board
+ */
 public class Board implements Serializable {
 
 	private static final long serialVersionUID = 3540754479334928544L;
@@ -55,9 +58,8 @@ public class Board implements Serializable {
 	/**
 	 * 
 	 * @param turn
-	 * @return
+	 * @return moves for a turn
 	 */
-	//TODO comments
 	@SuppressWarnings("unused")
 	public ArrayList<Move> find_moves(int turn) {
 		ArrayList<Move> allMoves = new ArrayList<Move>();
@@ -88,8 +90,8 @@ public class Board implements Serializable {
 				}
 			}
 		}
-		//TODO Can we turn this off? (DN)
 		// FORCED JUMP LOGIC, IF AT LEAST ONE JUMP AVAILABLE ONLY RETURN JUMP MOVES
+		// Turned off (DN)
 		if (jumpExists && false) {
 			Iterator<Move> itr = allMoves.iterator();
 			while (itr.hasNext()) {
@@ -104,8 +106,9 @@ public class Board implements Serializable {
 	 * Finds the moves a checker can take
 	 * @param row
 	 * @param col
-	 * @return
+	 * @return moves
 	 */
+	@SuppressWarnings("incomplete-switch")
 	public ArrayList<Move> find_moves(int row, int col) {
 		ArrayList<Move> oneCheckerMoves = new ArrayList<Move>();
 		Move newMove;
@@ -291,7 +294,7 @@ public class Board implements Serializable {
 	/**
 	 * Counts checkers for a player
 	 * @param who
-	 * @return
+	 * @return how many checkers a player has
 	 */
 	public int checkerCount(int who) { // WHITE=-1, CheckersConstants.BLACK=1
 		int count=0;
@@ -306,6 +309,9 @@ public class Board implements Serializable {
 		return count;
 	}
 	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString( ) {	
 		String temp = "\t1\t2\t3\t4\t5\t6\t7\t8\n";
@@ -332,7 +338,7 @@ public class Board implements Serializable {
 	/**
 	 * Checks to see if the game is ended on a player's turn
 	 * @param player
-	 * @return
+	 * @return true/false 
 	 */
 	public boolean end_game(int player) {
 		ArrayList<Move> data=find_moves(player);
@@ -417,7 +423,7 @@ public class Board implements Serializable {
 	 * Counts moves that could lead to a king arising
 	 * from the depths of the checker underworld
 	 * @param who CheckersConstants.BLACK or CheckersConstants.WHITE
-	 * @return Number of about to summon a king from the underworld
+	 * @return Number of checkers about to summon a king from the underworld
 	 */
 	public int checkersAboutToKing(int who) {
 		int count = 0;
@@ -425,6 +431,6 @@ public class Board implements Serializable {
 		for (Move m : ar)
 			if (m.getMadeKing())
 				count++;
-		return 0;
+		return count;
 	}
 }	

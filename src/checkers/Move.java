@@ -6,7 +6,7 @@ import java.io.Serializable;
 /**
  * This class represents a move in the game
  */
-public class Move implements Serializable {
+class Move implements Serializable {
 	private static final long serialVersionUID = -5399958376653578616L;
 	private int fx, fy; // FROM row, FROM column
 	private int tx, ty; // TO row, TO column
@@ -25,7 +25,7 @@ public class Move implements Serializable {
 	 * @param jumpedPiece
 	 * @param newNextMove
 	 */
-	public Move(int fromx, int fromY, int toX, int toY, boolean isJumped, boolean isMadeKing, char jumpedPiece,
+	Move(int fromx, int fromY, int toX, int toY, boolean isJumped, boolean isMadeKing, char jumpedPiece,
 			Move newNextMove) {
 		setMoveCoords(fromx, fromY, toX, toY);
 		jump = isJumped;
@@ -39,7 +39,7 @@ public class Move implements Serializable {
 	 * 
 	 * @param move
 	 */
-	public Move(Move move) { // copy constructor
+	Move(Move move) { // copy constructor
 		setMoveCoords(move.fx, move.fy, move.tx, move.ty);
 		jump = move.jump;
 		madeKing = move.madeKing;
@@ -56,7 +56,7 @@ public class Move implements Serializable {
 	 * @deprecated Use {@link #setMoveCoords(int,int,int,int)} instead
 	 */
 	@Deprecated
-	public void setFromTo(int fromX, int fromY, int toX, int toY) {
+	void setFromTo(int fromX, int fromY, int toX, int toY) {
 		setMoveCoords(fromX, fromY, toX, toY);
 	}
 
@@ -68,7 +68,7 @@ public class Move implements Serializable {
 	 * @param toX
 	 * @param toY
 	 */
-	public void setMoveCoords(int fromX, int fromY, int toX, int toY) {
+	void setMoveCoords(int fromX, int fromY, int toX, int toY) {
 		if (fromX >= 1 && fromX <= 8 && toX >= 1 && toY <= 8) {
 			fx = fromX;
 			fy = fromY;
@@ -83,7 +83,7 @@ public class Move implements Serializable {
 	 * 
 	 * @param newJumpedPiece
 	 */
-	public void setJumpedPiece(char newJumpedPiece) {
+	void setJumpedPiece(char newJumpedPiece) {
 		if (newJumpedPiece == CheckersConstants.BCHEC || newJumpedPiece == CheckersConstants.BKING
 				|| newJumpedPiece == CheckersConstants.WCHEC || newJumpedPiece == CheckersConstants.WKING
 				|| newJumpedPiece == CheckersConstants.AVAIL)
@@ -97,8 +97,7 @@ public class Move implements Serializable {
 	 * 
 	 * @param newNext
 	 */
-	// TODO is this used in chains?? (DN)
-	public void setNext(Move newNext) {
+	void setNext(Move newNext) {
 		if (newNext == null)
 			next = newNext;
 		else if (this.tx == newNext.fx && this.ty == newNext.fy)
@@ -107,46 +106,41 @@ public class Move implements Serializable {
 			System.err.println("Invalid Next Move " + newNext);
 	}
 
-	public int getFromX() {
+	int getFromX() {
 		return fx;
 	}
 
-	public int getFromY() {
+	int getFromY() {
 		return fy;
 	}
 
-	public int getToX() {
+	int getToX() {
 		return tx;
 	}
 
-	public int getToY() {
+	int getToY() {
 		return ty;
 	}
 
-	public boolean getJump() {
+	boolean getJump() {
 		return jump;
 	}
 
-	public boolean getMadeKing() {
+	boolean getMadeKing() {
 		return madeKing;
 	}
 
-	public char getJumpedPiece() {
+	char getJumpedPiece() {
 		return jumpedPiece;
 	}
 
-	public Move getNextMove() {
+	Move getNextMove() {
 		return next;
 	}
 
 	/**
 	 * toString for describing each move
 	 */
-	// TODO this needs desperate work
-	// potential format :
-	// (2,4) to (4,5) jump black king
-	// (2,4) to (4,5) make new king
-	// (2,4) to (4,5) jump black king, make new king
 	@Override
 	public String toString() {
 		String jp = "";

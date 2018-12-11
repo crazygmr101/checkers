@@ -27,13 +27,19 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * Application window
+ * 
+ * @author Daniel Nash
+ *
+ */
 public class GameWindow extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7384928133320272861L;
-	public JPanel contentPane;
+	JPanel contentPane;
 	private JPanel movePanel;
 	private JPanel boardPanel;
 	private JLabel lblStatus;
@@ -51,10 +57,11 @@ public class GameWindow extends JFrame {
 	 * Launch the application.
 	 * 
 	 * @param args
+	 * @param b - board for the window
 	 * @throws InterruptedException
 	 * @throws InvocationTargetException
 	 */
-	public static void main(String[] args, Board b) throws InvocationTargetException, InterruptedException {
+	public static void main(@SuppressWarnings("unused") String[] args, Board b) throws InvocationTargetException, InterruptedException {
 		EventQueue.invokeAndWait(new Runnable() {
 			@Override
 			public void run() {
@@ -113,6 +120,7 @@ public class GameWindow extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param b - board
 	 * 
 	 * @throws UnsupportedLookAndFeelException
 	 * @throws IllegalAccessException
@@ -172,19 +180,19 @@ public class GameWindow extends JFrame {
 		}
 	}
 
-	public JPanel getMovePanel() {
+	JPanel getMovePanel() {
 		return movePanel;
 	}
 
-	public JPanel getBoardPanel() {
+	JPanel getBoardPanel() {
 		return boardPanel;
 	}
 
-	public JLabel getLblStatus() {
+	JLabel getLblStatus() {
 		return lblStatus;
 	}
 
-	public void updateCheckers() {
+	void updateCheckers() {
 		for (int r = 0; r < 8; r++)
 			for (int c = 0; c < 8; c++)
 				cs[r][c].setChecker(board.board[r + 1][c + 1]);

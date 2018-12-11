@@ -7,10 +7,19 @@ package checkers;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+/**
+ * Main application
+ */
 public class Checkers {
 	static ArrayList<Move> possible;
 	static GameWindow gwin;
 	
+	/**
+	 * Entry point for application
+	 * @param args
+	 * @throws InvocationTargetException
+	 * @throws InterruptedException
+	 */
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
 		Board b = new Board();
 		int depth=7, totalMoves=150;
@@ -103,7 +112,7 @@ public class Checkers {
 		}
 	}
 	
-	public static int getChoice() {
+	private static int getChoice() {
 		gwin.choice = -1;
 		while(gwin.choice < 0 || gwin.choice > possible.size()) {
 			//do nothing
@@ -113,7 +122,7 @@ public class Checkers {
 		return gwin.choice;
 	}
 	
-	public static void printMoves() {
+	private static void printMoves() {
 		gwin.movesList = new ArrayList<Move>();
 		int i=0;
 		for (Move m : possible) {

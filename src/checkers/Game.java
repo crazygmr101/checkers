@@ -15,7 +15,7 @@ public class Game {
 	 * @param board
 	 * @param blackDepth
 	 * @param whiteDepth
-	 * @param display //TODO um what (DN)
+	 * @param display - whether the game is displayed to console or not
 	 */
 	public Game(Board board, int blackDepth, int whiteDepth, boolean display) {
 		b=board;
@@ -113,9 +113,9 @@ public class Game {
 	 * @param whoseMove
 	 * @param level
 	 * @param turn
-	 * @return
+	 * @return returns score for a move tree
 	 */
-	@SuppressWarnings("boxing")
+
 	public int minmaxR(int whoseMove, int level, int turn) {
 		ArrayList<Move> possible_moves;
 		ArrayList<Integer> scores = new ArrayList<Integer>();

@@ -305,17 +305,7 @@ public class Board implements Serializable {
 		}
 		return count;
 	}
-
-	/**
-	 * toString method
-	 * @return 
-	 */
-	//TODO maybe make this a bit better? (DN)
-	//Potential format
-	// 12345678
-	//1w W B .
-	//2 . . . .
-	// ...
+	
 	@Override
 	public String toString( ) {	
 		String temp = "\t1\t2\t3\t4\t5\t6\t7\t8\n";
@@ -330,6 +320,8 @@ public class Board implements Serializable {
 				case CheckersConstants.BKING: temp=temp+"BK\t"; break;
 				case CheckersConstants.AVAIL: temp=temp+".\t"; break;
 				case CheckersConstants.OUT:   temp=temp+"\t"; break;
+				default:
+					break;
 				}
 			}
 			temp=temp+"\n";

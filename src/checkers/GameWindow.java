@@ -14,6 +14,7 @@ import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
@@ -117,9 +118,10 @@ public class GameWindow extends JFrame {
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 * @throws ClassNotFoundException
+	 * @throws IOException 
 	 */
 	public GameWindow(Board b) throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-			UnsupportedLookAndFeelException {
+			UnsupportedLookAndFeelException, IOException {
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		this.board = b;
 		setTitle("Checkers");
@@ -144,7 +146,7 @@ public class GameWindow extends JFrame {
 
 		for (int r = 0; r < 8; r++)
 			for (int c = 0; c < 8; c++) {
-				cs[r][c] = new CheckerSquare(frame);
+				cs[r][c] = new CheckerSquare(frame, ((r + c) % 2 == 0));
 				cs[r][c].isBlack = ((r + c) % 2 == 0);
 				cs[r][c].setName(String.valueOf(r) + String.valueOf(c));
 				boardPanel.add(cs[r][c]);

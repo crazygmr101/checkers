@@ -15,11 +15,11 @@ public class Game {
 	 * @param board
 	 * @param blackDepth
 	 * @param whiteDepth
-	 * @param display //TODO um what (DN)
+	 * @param display - whether the game is displayed to console or not
 	 */
 	public Game(Board board, int blackDepth, int whiteDepth, boolean display) {
 		b=board;
-		display=display;
+		this.display=display;
 		if (blackDepth>0) BLACKdepth=blackDepth;
 		else BLACKdepth=6;
 		if (whiteDepth>0) WHITEdepth=whiteDepth;
@@ -33,18 +33,21 @@ public class Game {
 	public void	comp_move(int turn) {
 		Move m;
 		if (turn == CheckersConstants.BLACK) {
+			GameWindow.frame.getLblStatus().setText("Black thinking");
 			if (display) {
 				System.out.println("Black move - thinking");
 			}
 			m = bestMove(turn, BLACKdepth, turn);
 		}
 		else {
+			GameWindow.frame.getLblStatus().setText("White thinking");
 			if (display) {
 				System.out.println("White move - thinking");
 			}
 			m = bestMove(turn, WHITEdepth, turn);
 		}
 		if (display) System.out.println(m);
+		GameWindow.frame.getLblStatus().setText(" ");
 		b.make_move(m);		// make move
 	}
 	
@@ -110,8 +113,9 @@ public class Game {
 	 * @param whoseMove
 	 * @param level
 	 * @param turn
-	 * @return
+	 * @return returns score for a move tree
 	 */
+
 	public int minmaxR(int whoseMove, int level, int turn) {
 		ArrayList<Move> possible_moves;
 		ArrayList<Integer> scores = new ArrayList<Integer>();

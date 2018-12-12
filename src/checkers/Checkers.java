@@ -7,19 +7,38 @@ package checkers;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+/**
+ * Main application
+ */
 public class Checkers {
+	static ArrayList<Move> possible;
+	static GameWindow gwin;
+	
+	/**
+	 * Entry point for application
+	 * @param args
+	 * @throws InvocationTargetException
+	 * @throws InterruptedException
+	 */
 	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-		GameWindow.main(null);
-		GameWindow gwin = GameWindow.frame;
+		Board b = new Board();
 		int depth=7, totalMoves=150;
 		boolean display=true;
-		Scanner in = new Scanner(System.in);
 		System.out.println("Black Moves First");
 		System.out.print("Who goes first, Human or Computer (H or C)? ");
-		Board b = new Board();
 		Game g = new Game(b, depth, depth, display);
+
+		GameWindow.main(null, b);
+		gwin = GameWindow.frame;
+		gwin.choice = -1;
+		gwin.moves[0].setText("Human first");
+		gwin.moves[1].setText("Computer first");
+		while (gwin.choice != 1 && gwin.choice != 0) {
+			//do nothing
+		}
+		boolean computerFirst = gwin.choice == 1;
 		int counter=0;		
-		if (in.next().equals("C")) {  // Computer first (black)
+		if (computerFirst) {  // Computer first (black)
 			System.out.println("Computer is Black");
 			while(counter<totalMoves) {
 				if (b.end_game(CheckersConstants.BLACK)) {
@@ -29,6 +48,7 @@ public class Checkers {
 				g.comp_move(CheckersConstants.BLACK);
 				counter++;
 				gwin.board = b;
+				gwin.updateCheckers();
 				System.out.println(b);	
 		
 				if (b.end_game(CheckersConstants.WHITE)) {
@@ -36,22 +56,10 @@ public class Checkers {
 					break;
 				}
 				// Find and display available human moves 
-				ArrayList<Move> possible = b.find_moves(CheckersConstants.WHITE);
+				possible = b.find_moves(CheckersConstants.WHITE);
 				System.out.println("White move");
-				
-				int i=0;
-				for (Move m : possible) {
-					System.out.println(i+": "+ m);
-					i++;
-				}
-				// prompt human to choose one
-				boolean moveChosen=false;
-				int n=0;
-				do {
-					System.out.print("Which move? ");
-					n = in.nextInt();
-					if (n>=0 && n<possible.size()) moveChosen=true;
-				} while (!moveChosen);
+				printMoves();
+				int n= getChoice();
 				b.make_move(possible.get(n));
 				counter++;
 				//System.out.println(b);		
@@ -67,25 +75,15 @@ public class Checkers {
 					break;
 				}
 				// Find and display available human moves 
-				ArrayList<Move> possible = b.find_moves(CheckersConstants.BLACK);
+				possible = b.find_moves(CheckersConstants.BLACK);
 				System.out.println("Black move");
 				
-				int i=0;
-				for (Move m : possible) {
-					System.out.println(i+": "+ m);
-					i++;
-				}
-				// prompt human to choose one
-				boolean moveChosen=false;
-				int n=0;
-				do {
-					System.out.print("Which move? ");
-					n = in.nextInt();
-					if (n>=0 && n<possible.size()) moveChosen=true;
-				} while (!moveChosen);
+				printMoves();
+				int n= getChoice();
 				b.make_move(possible.get(n));
 				counter++;
 				gwin.board = b;
+				gwin.updateCheckers();
 				System.out.println(b);	
 				
 				if (b.end_game(CheckersConstants.WHITE)) {
@@ -95,10 +93,32 @@ public class Checkers {
 				g.comp_move(CheckersConstants.WHITE);
 				counter++;
 				gwin.board = b;
+				gwin.updateCheckers();
 				System.out.println(b);	
 			}
 			if (counter==totalMoves) 
 				System.out.print("TieHuman("+b.checkerCount(CheckersConstants.BLACK)+")Computer("+b.checkerCount(CheckersConstants.WHITE)+")  "); 
+		}
+	}
+	
+	private static int getChoice() {
+		gwin.choice = -1;
+		while(gwin.choice < 0) {
+			//do nothing
+		}
+		for (int i = 0; i < gwin.moves.length; i++)
+			gwin.moves[i].setText("---------");
+		return gwin.choice;
+	}
+	
+	private static void printMoves() {
+		gwin.movesList = new ArrayList<Move>();
+		int i=0;
+		for (Move m : possible) {
+			gwin.moves[i].setText(String.valueOf(i) + ':' + m);
+			gwin.movesList.add(m);
+			System.out.println(i+": "+ m);
+			i++;
 		}
 	}
 }

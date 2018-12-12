@@ -1,10 +1,15 @@
 package checkers;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Board {
+/**
+ * Class that represents a board
+ */
+public class Board implements Serializable {
 
-	private char [][] board;
+	private static final long serialVersionUID = 3540754479334928544L;
+	char [][] board;
 
 	/**
 	 * @return the board
@@ -53,9 +58,9 @@ public class Board {
 	/**
 	 * 
 	 * @param turn
-	 * @return
+	 * @return moves for a turn
 	 */
-	//TODO comments
+	@SuppressWarnings("unused")
 	public ArrayList<Move> find_moves(int turn) {
 		ArrayList<Move> allMoves = new ArrayList<Move>();
 		boolean jumpExists=false;
@@ -85,12 +90,12 @@ public class Board {
 				}
 			}
 		}
-		//TODO Can we turn this off? (DN)
 		// FORCED JUMP LOGIC, IF AT LEAST ONE JUMP AVAILABLE ONLY RETURN JUMP MOVES
-		if (jumpExists) {
+		// Turned off (DN)
+		if (jumpExists && false) {
 			Iterator<Move> itr = allMoves.iterator();
 			while (itr.hasNext()) {
-				Move m = (Move)itr.next();
+				Move m = itr.next();
 				if (m.getJump()==false) itr.remove();
 			}
 		}
@@ -101,8 +106,9 @@ public class Board {
 	 * Finds the moves a checker can take
 	 * @param row
 	 * @param col
-	 * @return
+	 * @return moves
 	 */
+	@SuppressWarnings("incomplete-switch")
 	public ArrayList<Move> find_moves(int row, int col) {
 		ArrayList<Move> oneCheckerMoves = new ArrayList<Move>();
 		Move newMove;
@@ -288,7 +294,7 @@ public class Board {
 	/**
 	 * Counts checkers for a player
 	 * @param who
-	 * @return
+	 * @return how many checkers a player has
 	 */
 	public int checkerCount(int who) { // WHITE=-1, CheckersConstants.BLACK=1
 		int count=0;
@@ -302,17 +308,10 @@ public class Board {
 		}
 		return count;
 	}
-
+	
 	/**
-	 * toString method
-	 * @return 
+	 * @see java.lang.Object#toString()
 	 */
-	//TODO maybe make this a bit better? (DN)
-	//Potential format
-	// 12345678
-	//1w W B .
-	//2 . . . .
-	// ...
 	@Override
 	public String toString( ) {	
 		String temp = "\t1\t2\t3\t4\t5\t6\t7\t8\n";
@@ -327,6 +326,8 @@ public class Board {
 				case CheckersConstants.BKING: temp=temp+"BK\t"; break;
 				case CheckersConstants.AVAIL: temp=temp+".\t"; break;
 				case CheckersConstants.OUT:   temp=temp+"\t"; break;
+				default:
+					break;
 				}
 			}
 			temp=temp+"\n";
@@ -337,7 +338,7 @@ public class Board {
 	/**
 	 * Checks to see if the game is ended on a player's turn
 	 * @param player
-	 * @return
+	 * @return true/false 
 	 */
 	public boolean end_game(int player) {
 		ArrayList<Move> data=find_moves(player);
@@ -422,7 +423,7 @@ public class Board {
 	 * Counts moves that could lead to a king arising
 	 * from the depths of the checker underworld
 	 * @param who CheckersConstants.BLACK or CheckersConstants.WHITE
-	 * @return Number of about to summon a king from the underworld
+	 * @return Number of checkers about to summon a king from the underworld
 	 */
 	public int checkersAboutToKing(int who) {
 		int count = 0;
@@ -430,6 +431,6 @@ public class Board {
 		for (Move m : ar)
 			if (m.getMadeKing())
 				count++;
-		return 0;
+		return count;
 	}
 }	

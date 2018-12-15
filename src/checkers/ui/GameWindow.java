@@ -49,7 +49,7 @@ public class GameWindow extends JFrame {
 	volatile boolean changed = true;
 	volatile CheckerSquare[][] cs = new CheckerSquare[8][8];
 	public volatile int choice = 0;
-	public volatile JButton moves[] = new JButton[10];
+	public volatile JButton moves[] = new JButton[20];
 	public volatile ArrayList<Move> movesList;
 
 	/**

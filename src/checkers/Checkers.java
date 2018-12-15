@@ -26,15 +26,28 @@ public class Checkers {
 		Board b = new Board();
 		int depth=7, totalMoves=150;
 		boolean display=true;
+		GameWindow.main(null, b);
+		gwin = GameWindow.frame;
+
+		gwin.choice = -1;
+		gwin.moves[0].setText("Easiest");
+		gwin.moves[1].setText("Easy");
+		gwin.moves[2].setText("Medium");
+		gwin.moves[3].setText("Hard");
+		while (gwin.choice < 0 || gwin.choice >= 3) {
+			//do nothing
+		}
+		
+		depth = (new int[] {1, 3, 5, 7})[gwin.choice];
+		
 		System.out.println("Black Moves First");
 		System.out.print("Who goes first, Human or Computer (H or C)? ");
 		Game g = new Game(b, depth, depth, display);
-
-		GameWindow.main(null, b);
-		gwin = GameWindow.frame;
 		gwin.choice = -1;
 		gwin.moves[0].setText("Human first");
 		gwin.moves[1].setText("Computer first");
+		gwin.moves[2].setText("-----");
+		gwin.moves[3].setText("-----");
 		while (gwin.choice != 1 && gwin.choice != 0) {
 			//do nothing
 		}
@@ -103,7 +116,7 @@ public class Checkers {
 		}
 	}
 	
-	private static int getChoice() {
+	private static int getChoice() throws InterruptedException {
 		gwin.choice = -1;
 		while(gwin.choice < 0) {
 			//do nothing

@@ -7,12 +7,6 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.RescaleOp;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import checkers.CheckersConstants;
 
 /**
@@ -71,14 +65,13 @@ public class CheckerSquare extends Canvas implements CheckersConstants {
 	/**
 	 * @param frame - frame the game is in
 	 * @param isBlack - whether the square is black or not
-	 * @throws IOException
 	 * @see checkers.CheckersConstants
 	 */
-	public CheckerSquare(GameWindow frame, boolean isBlack) throws IOException {
+	public CheckerSquare(GameWindow frame, boolean isBlack) {
 		this.isBlack = isBlack;
-		bg = ImageIO.read(new File("src/rc/assets/" + (isBlack ? "black" : "white" ) + "_square_100x.png"));
-		RescaleOp op = new RescaleOp(0.9f, 0, null);
-		bg2 = op.filter(bg, null);
+		//bg = ImageIO.read(new File("src/rc/assets/" + (isBlack ? "black" : "white" ) + "_square_100x.png"));
+		//RescaleOp op = new RescaleOp(0.9f, 0, null);
+		//bg2 = op.filter(bg, null);
 		addMouseListener(new Handler(frame));
 	}
 

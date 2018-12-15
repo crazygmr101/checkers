@@ -2,6 +2,8 @@ package checkers;
 
 import java.util.*;
 
+import checkers.ui.GameWindow;
+
 /**
  * This is the basic class that handles the game itself
  */

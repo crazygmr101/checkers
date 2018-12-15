@@ -9,7 +9,12 @@ import java.util.*;
 public class Board implements Serializable {
 
 	private static final long serialVersionUID = 3540754479334928544L;
-	char [][] board;
+	
+	/**
+	 * Character array that represents the board
+	 * @see checkers.CheckersConstants
+	 */
+	public char [][] board;
 
 	/**
 	 * @return the board

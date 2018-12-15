@@ -7,6 +7,8 @@ package checkers;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+import checkers.ui.GameWindow;
+
 /**
  * Main application
  */

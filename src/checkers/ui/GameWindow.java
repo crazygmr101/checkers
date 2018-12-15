@@ -3,7 +3,7 @@
  * This file is currently being worked on in WindowBuilder, and
  * may not parse correctly if modified
  */
-package checkers;
+package checkers.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
@@ -27,12 +27,16 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
+import checkers.Board;
+import checkers.Move;
+
 /**
  * Application window
  * 
  * @author Daniel Nash
  *
  */
+
 public class GameWindow extends JFrame {
 
 	/**
@@ -44,14 +48,14 @@ public class GameWindow extends JFrame {
 	private JPanel boardPanel;
 	private JLabel lblStatus;
 	private JScrollPane scrollPanel;
-	volatile Board board;
+	public volatile Board board;
 	volatile boolean cont = true;
-	volatile static GameWindow frame;
+	public volatile static GameWindow frame;
 	volatile boolean changed = true;
 	volatile CheckerSquare[][] cs = new CheckerSquare[8][8];
-	volatile int choice = 0;
-	volatile JButton moves[] = new JButton[10];
-	volatile ArrayList<Move> movesList;
+	public volatile int choice = 0;
+	public volatile JButton moves[] = new JButton[10];
+	public volatile ArrayList<Move> movesList;
 
 	/**
 	 * Launch the application.
@@ -186,11 +190,11 @@ public class GameWindow extends JFrame {
 		return boardPanel;
 	}
 
-	JLabel getLblStatus() {
+	public JLabel getLblStatus() {
 		return lblStatus;
 	}
 
-	void updateCheckers() {
+	public void updateCheckers() {
 		for (int r = 0; r < 8; r++)
 			for (int c = 0; c < 8; c++)
 				cs[r][c].setChecker(board.board[r + 1][c + 1]);

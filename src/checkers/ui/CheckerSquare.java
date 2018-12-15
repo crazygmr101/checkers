@@ -1,4 +1,4 @@
-package checkers;
+package checkers.ui;
 
 import java.awt.Canvas;
 import java.awt.Color;
@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+
+import checkers.CheckersConstants;
 
 /**
  * Represents a checker square

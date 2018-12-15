@@ -6,7 +6,7 @@ import java.io.Serializable;
 /**
  * This class represents a move in the game
  */
-class Move implements Serializable {
+public class Move implements Serializable {
 	private static final long serialVersionUID = -5399958376653578616L;
 	private int fx, fy; // FROM row, FROM column
 	private int tx, ty; // TO row, TO column

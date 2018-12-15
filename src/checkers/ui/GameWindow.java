@@ -36,12 +36,8 @@ import checkers.Move;
  * @author Daniel Nash
  *
  */
-
 public class GameWindow extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7384928133320272861L;
 	JPanel contentPane;
 	private JPanel movePanel;

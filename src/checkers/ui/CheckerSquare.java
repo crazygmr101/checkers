@@ -94,10 +94,12 @@ public class CheckerSquare extends Canvas implements CheckersConstants {
 		g.setColor(isBlack ? Color.DARK_GRAY : Color.WHITE);
 		g.fillRect(0, 0, getWidth(), getHeight());
 
-		g.drawImage(bg, 0, 0, getWidth(), getHeight(), 0, 0, bg.getWidth(), bg.getHeight(), null);
+		//g.drawImage(bg, 0, 0, getWidth(), getHeight(), 0, 0, bg.getWidth(), bg.getHeight(), null);
 
 		if (isMouseIn && !isBlack) {
-			g.drawImage(bg2, 0, 0, getWidth(), getHeight(), 0, 0, bg.getWidth(), bg.getHeight(), null);
+			g.setColor(Color.LIGHT_GRAY);
+			g.fillRect(0, 0, getWidth(), getHeight());
+			//g.drawImage(bg2, 0, 0, getWidth(), getHeight(), 0, 0, bg.getWidth(), bg.getHeight(), null);
 		}
 		if (checker != ' ' && checker != 'O') {
 			if (checker == 'b' || checker == 'B')

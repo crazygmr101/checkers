@@ -59,7 +59,7 @@ public class CheckerSquare extends Canvas implements CheckersConstants {
 		this.checker = checker;
 		repaint();
 	}
-
+	
 	private boolean changed = true;
 
 	/**

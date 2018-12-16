@@ -49,7 +49,7 @@ public class GameWindow extends JFrame {
 	volatile boolean changed = true;
 	volatile CheckerSquare[][] cs = new CheckerSquare[8][8];
 	public volatile int choice = 0;
-	public volatile JButton moves[] = new JButton[20];
+	public volatile CheckerButton moves[] = new CheckerButton[20];
 	public volatile ArrayList<Move> movesList;
 
 	/**
@@ -165,11 +165,11 @@ public class GameWindow extends JFrame {
 		movePanel.setMinimumSize(new Dimension(250, 10));
 		scrollPanel = new JScrollPane(movePanel);
 		contentPane.add(scrollPanel, BorderLayout.EAST);
-		movePanel.setLayout(new GridLayout(10, 1, 0, 0));
+		movePanel.setLayout(new GridLayout(20, 1, 0, 0));
 		movePanel.setName("movePnl");
 
 		for (int i = 0; i < moves.length; i++) {
-			moves[i] = new JButton(String.valueOf("-----"));
+			moves[i] = new CheckerButton(String.valueOf("-----"));
 			moves[i].setName(String.valueOf(i));
 			moves[i].addMouseListener(new MoveHandler(this));
 			movePanel.add(moves[i]);

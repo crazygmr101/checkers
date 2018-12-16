@@ -4,21 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Insets;
-import java.awt.Point;
 import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-
 import javax.swing.AbstractButton;
-import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.UIManager;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.basic.BasicButtonUI;
 
@@ -54,6 +44,12 @@ class CheckerButtonUI extends BasicButtonUI implements java.io.Serializable, Mou
 	public void paint(Graphics g, JComponent c) {
 		AbstractButton b = (AbstractButton) c;
 		Dimension d = b.getSize();
+		
+		if (b.getText().indexOf("-") != -1) {
+			g.setColor(Color.WHITE);
+			g.fillRect(0, 0, b.getWidth(), b.getHeight());
+			return;
+		}
 
 		g.setFont(c.getFont());
 		FontMetrics fm = g.getFontMetrics();
@@ -71,22 +67,28 @@ class CheckerButtonUI extends BasicButtonUI implements java.io.Serializable, Mou
 			}
 			g.setColor(Color.BLACK);
 			g.drawRect(2, 2, b.getWidth() - 3, b.getHeight() - 3);
-		} else {
+			g.setColor(Color.BLACK);
+			g.drawString(caption, x - (isHover ? 1 : 0), y - (isHover ? 1 : 0));
+		} else if (b.getText().indexOf("-") == -1) {
 			if (isClick) {
 				g.setColor(Color.LIGHT_GRAY);
 				g.fillRect(1, 1, b.getWidth() - 3, b.getHeight() - 3);
 			}
-			//if hovering, offset button
+			// if hovering, offset button
 			g.setColor(Color.BLACK);
 			g.drawRect(1, 1, b.getWidth() - 3, b.getHeight() - 3);
-			//make a shadow
+			// make a shadow
 			g.setColor(Color.LIGHT_GRAY);
 			g.drawLine(b.getWidth() - 1, 2, b.getWidth() - 1, b.getHeight() - 1);
 			g.drawLine(2, b.getHeight() - 1, b.getWidth() - 1, b.getHeight() - 1);
+			g.setColor(Color.BLACK);
+			g.drawString(caption, x - (isHover ? 1 : 0), y - (isHover ? 1 : 0));
+		} else {
+			g.setColor(Color.BLACK);
+			g.drawRect(2, 2, b.getWidth() - 3, b.getHeight() - 3);
+			g.setColor(Color.BLACK);
+			g.drawString(caption, x, y);
 		}
-		g.setColor(Color.BLACK);
-		g.drawString(caption, x - (isHover ? 1 : 0), y - (isHover ? 1 : 0));
-
 	}
 
 	@Override

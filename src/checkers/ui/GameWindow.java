@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -25,6 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import checkers.Board;
 import checkers.Move;
@@ -53,6 +55,7 @@ public class GameWindow extends JFrame {
 	public volatile JButton moves[] = new JButton[20];
 	public volatile ArrayList<Move> movesList;
 	public CheckerButtonUI cbtn_ui[] = new CheckerButtonUI[20];
+	public boolean gameStarted = false;
 
 	/**
 	 * Launch the application.
@@ -129,7 +132,7 @@ public class GameWindow extends JFrame {
 	 * @throws ClassNotFoundException
 	 */
 	public GameWindow(Board b) throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-			UnsupportedLookAndFeelException {
+	UnsupportedLookAndFeelException {
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		this.board = b;
 		setTitle("Checkers");
@@ -142,9 +145,15 @@ public class GameWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 
+		JPanel lblPane = new JPanel();
+
 		lblStatus = new JLabel("Checkers Game");
+		lblStatus.setFont(lblStatus.getFont().deriveFont(Font.BOLD).deriveFont(15f));
 		lblStatus.setAlignmentX(Component.CENTER_ALIGNMENT);
-		contentPane.add(lblStatus, BorderLayout.NORTH);
+		lblPane.add(lblStatus, BorderLayout.CENTER);
+
+		contentPane.add(lblPane, BorderLayout.NORTH);
+		lblPane.setBackground(Color.WHITE);
 
 		boardPanel = new JPanel();
 		boardPanel.setBackground(Color.WHITE);
@@ -153,6 +162,7 @@ public class GameWindow extends JFrame {
 		boardPanel.setMaximumSize(new Dimension(500, 500));
 		contentPane.add(boardPanel, BorderLayout.CENTER);
 		boardPanel.setLayout(new GridLayout(8, 8, 0, 0));
+		boardPanel.setBorder(new LineBorder(Color.BLACK));
 
 		for (int r = 0; r < 8; r++)
 			for (int c = 0; c < 8; c++) {
@@ -173,8 +183,8 @@ public class GameWindow extends JFrame {
 		contentPane.add(scrollPanel, BorderLayout.EAST);
 		movePanel.setLayout(new GridLayout(20, 1, 0, 0));
 		movePanel.setName("movePnl");
-		
-		
+
+
 		for (int i = 0; i < moves.length; i++) {
 			moves[i] = new JButton(String.valueOf("-----"));
 			moves[i].setName(String.valueOf(i));
@@ -220,15 +230,40 @@ class MoveHandler implements MouseListener {
 		if (e.getComponent().getName().indexOf("-") != -1)
 			return;
 		win.choice = Integer.parseInt(e.getComponent().getName());
+		if (!win.gameStarted)
+			return;
+		Move m = lookup(e);
+		if (m == null) return;
+		win.cs[m.getFx() - 1][m.getFy() - 1].isMouseIn = false;
+		win.cs[m.getTx() - 1][m.getTy() - 1].isMouseIn = false;
+		win.cs[m.getFx() - 1][m.getFy() - 1].repaint();
+		win.cs[m.getTx() - 1][m.getTy() - 1].repaint();
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
+		if (!win.gameStarted)
+			return;
+		Move m = lookup(e);
+		if (m == null) return;
+		win.cs[m.getFx() - 1][m.getFy() - 1].isMouseIn = true;
+		win.cs[m.getTx() - 1][m.getTy() - 1].isMouseIn = true;
+		win.cs[m.getFx() - 1][m.getFy() - 1].repaint();
+		win.cs[m.getTx() - 1][m.getTy() - 1].repaint();
+		win.updateCheckers();
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-
+		if (!win.gameStarted)
+			return;
+		Move m = lookup(e);
+		if (m == null) return;
+		win.cs[m.getFx() - 1][m.getFy() - 1].isMouseIn = false;
+		win.cs[m.getTx() - 1][m.getTy() - 1].isMouseIn = false;
+		win.cs[m.getFx() - 1][m.getFy() - 1].repaint();
+		win.cs[m.getTx() - 1][m.getTy() - 1].repaint();
+		win.updateCheckers();
 	}
 
 	@Override
@@ -239,6 +274,14 @@ class MoveHandler implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 
+	}
+
+	private Move lookup(MouseEvent e) {
+		if (Integer.valueOf(e.getComponent().getName()) < win.movesList.size() && e.getComponent().getName().indexOf("-") == -1) {
+			return win.movesList.get(Integer.valueOf(e.getComponent().getName()));
+		}
+		else
+			return null;
 	}
 
 }

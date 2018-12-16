@@ -47,6 +47,35 @@ public class Move implements Serializable {
 		setNext(move.next);
 	}
 
+
+	/**
+	 * @return the fx
+	 */
+	public int getFx() {
+		return fx;
+	}
+
+	/**
+	 * @return the fy
+	 */
+	public int getFy() {
+		return fy;
+	}
+
+	/**
+	 * @return the tx
+	 */
+	public int getTx() {
+		return tx;
+	}
+
+	/**
+	 * @return the ty
+	 */
+	public int getTy() {
+		return ty;
+	}
+
 	/**
 	 * 
 	 * @param fromX

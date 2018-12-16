@@ -28,6 +28,7 @@ import javax.swing.border.EmptyBorder;
 
 import checkers.Board;
 import checkers.Move;
+import javafx.scene.layout.Border;
 
 /**
  * Application window
@@ -49,8 +50,9 @@ public class GameWindow extends JFrame {
 	volatile boolean changed = true;
 	volatile CheckerSquare[][] cs = new CheckerSquare[8][8];
 	public volatile int choice = 0;
-	public volatile CheckerButton moves[] = new CheckerButton[20];
+	public volatile JButton moves[] = new JButton[20];
 	public volatile ArrayList<Move> movesList;
+	public CheckerButtonUI cbtn_ui[] = new CheckerButtonUI[20];
 
 	/**
 	 * Launch the application.
@@ -135,6 +137,7 @@ public class GameWindow extends JFrame {
 		setBounds(100, 100, 872, 379);
 		setResizable(false);
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -144,6 +147,7 @@ public class GameWindow extends JFrame {
 		contentPane.add(lblStatus, BorderLayout.NORTH);
 
 		boardPanel = new JPanel();
+		boardPanel.setBackground(Color.WHITE);
 		boardPanel.setPreferredSize(new Dimension(500, 500));
 		boardPanel.setSize(new Dimension(500, 500));
 		boardPanel.setMaximumSize(new Dimension(500, 500));
@@ -162,16 +166,23 @@ public class GameWindow extends JFrame {
 			}
 
 		movePanel = new JPanel();
+		movePanel.setBackground(Color.WHITE);
 		movePanel.setMinimumSize(new Dimension(250, 10));
 		scrollPanel = new JScrollPane(movePanel);
+		scrollPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 		contentPane.add(scrollPanel, BorderLayout.EAST);
 		movePanel.setLayout(new GridLayout(20, 1, 0, 0));
 		movePanel.setName("movePnl");
-
+		
+		
 		for (int i = 0; i < moves.length; i++) {
-			moves[i] = new CheckerButton(String.valueOf("-----"));
+			moves[i] = new JButton(String.valueOf("-----"));
 			moves[i].setName(String.valueOf(i));
-			moves[i].addMouseListener(new MoveHandler(this));
+			cbtn_ui[i] = new CheckerButtonUI();
+			cbtn_ui[i].aux_listener = new MoveHandler(this);
+
+			moves[i].setUI(cbtn_ui[i]);
+			//moves[i].addMouseListener(new MoveHandler(this));
 			movePanel.add(moves[i]);
 		}
 	}

@@ -1,8 +1,11 @@
-# Style Guide
-All code MUST:
-- Have JavaDoc comments
-- be properly commented
-- use Eclipse auto-indent
+# Checkers
 
-# TODO Comments
-When you make a TODO comment, make sure you put your initials after the question
+## Playing
+- Select a difficulty
+- Select who goes first
+  - Black moves first
+- Play!
+
+## Notes
+### Links
+[Releases](https://github.com/dannash987/checkers/releases)

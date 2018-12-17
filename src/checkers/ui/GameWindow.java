@@ -13,12 +13,16 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -184,7 +188,12 @@ public class GameWindow extends JFrame {
 		movePanel.setLayout(new GridLayout(20, 1, 0, 0));
 		movePanel.setName("movePnl");
 
-
+		JCheckBox viewOutput = new JCheckBox();
+		viewOutput.setText("Show Output");
+		viewOutput.setSelected(true);
+		viewOutput.addItemListener(new CheckHandler());
+		contentPane.add(viewOutput, BorderLayout.SOUTH);
+		
 		for (int i = 0; i < moves.length; i++) {
 			moves[i] = new JButton(String.valueOf("-----"));
 			moves[i].setName(String.valueOf(i));
@@ -217,6 +226,14 @@ public class GameWindow extends JFrame {
 	}
 }
 
+class CheckHandler implements ItemListener {
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		OutputFrame.frame.setVisible(e.getStateChange() != ItemEvent.DESELECTED);
+	}
+}
+
 class MoveHandler implements MouseListener {
 
 	private GameWindow win;
@@ -227,7 +244,7 @@ class MoveHandler implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (e.getComponent().getName().indexOf("-") != -1)
+		if (((AbstractButton)e.getComponent()).getText().indexOf("-") != -1)
 			return;
 		win.choice = Integer.parseInt(e.getComponent().getName());
 		if (!win.gameStarted)
@@ -283,5 +300,4 @@ class MoveHandler implements MouseListener {
 		else
 			return null;
 	}
-
 }

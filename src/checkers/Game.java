@@ -3,6 +3,7 @@ package checkers;
 import java.util.*;
 
 import checkers.ui.GameWindow;
+import checkers.ui.OutputFrame;
 
 /**
  * This is the basic class that handles the game itself
@@ -51,6 +52,7 @@ public class Game {
 		if (display) System.out.println(m);
 		GameWindow.frame.getLblStatus().setText(" ");
 		b.make_move(m);		// make move
+		OutputFrame.frame.add((turn == CheckersConstants.BLACK ? "Black:" : "White:") + m);
 	}
 	
 	/**

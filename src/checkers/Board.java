@@ -3,6 +3,8 @@ package checkers;
 import java.io.Serializable;
 import java.util.*;
 
+import checkers.ui.OutputFrame;
+
 /**
  * Class that represents a board
  */
@@ -233,14 +235,15 @@ public class Board implements Serializable {
 	 * @param m
 	 */
 	public void make_move(Move m) {
+		int tx, ty, fx, fy;
 		do {
-			int fx=m.getFromX();
-			int fy=m.getFromY();
+			fx=m.getFromX();
+			fy=m.getFromY();
 			char piece = board[fx][fy];
 			board[fx][fy] = CheckersConstants.AVAIL;
 
-			int tx=m.getToX();
-			int ty=m.getToY();
+			tx=m.getToX();
+			ty=m.getToY();
 			int k=0, l=0;
 			// left, right, down or up
 			if (tx > fx) k = 1; else k = -1;
@@ -256,8 +259,9 @@ public class Board implements Serializable {
 			// update the board with moved piece
 			board[tx][ty] = piece;
 			m=m.getNextMove();
+			
 
-		} while (m != null); 
+		} while (m != null);
 	}	
 
 	/**

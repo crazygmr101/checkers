@@ -9,11 +9,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 import checkers.ui.GameWindow;
+import checkers.ui.OutputFrame;
 
 /**
  * Main application
  */
-public class Checkers {
+public class Checkers implements CheckersConstants {
 	static ArrayList<Move> possible;
 	static GameWindow gwin;
 
@@ -29,6 +30,7 @@ public class Checkers {
 		int depth = 7, totalMoves = 1500;
 		boolean display = true;
 		GameWindow.main(null, b);
+		OutputFrame.main(null);
 		gwin = GameWindow.frame;
 
 		gwin.choice = -1;
@@ -86,6 +88,7 @@ public class Checkers {
 				gwin.getLblStatus().setText("Make a move");
 				int n = getChoice();
 				b.make_move(possible.get(n));
+				OutputFrame.frame.add("White:" + possible.get(n));
 				counter++;
 				// System.out.println(b);
 			}
@@ -108,6 +111,7 @@ public class Checkers {
 				printMoves();
 				int n = getChoice();
 				b.make_move(possible.get(n));
+				OutputFrame.frame.add("Black:" + possible.get(n));
 				counter++;
 				gwin.board = b;
 				gwin.updateCheckers();

@@ -1,4 +1,4 @@
-package checkers;
+package game.core;
 
 import java.awt.EventQueue;
 

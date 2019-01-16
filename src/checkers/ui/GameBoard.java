@@ -6,6 +6,7 @@ import java.awt.Graphics;
 
 import checkers.ChessPiece;
 import checkers.Constants;
+import game.util.Square;
 
 @SuppressWarnings("serial")
 public class GameBoard extends Canvas implements Constants {

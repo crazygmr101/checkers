@@ -1,4 +1,4 @@
-package checkers.ui;
+package game.util;
 
 import java.awt.Color;
 import java.awt.Graphics;
